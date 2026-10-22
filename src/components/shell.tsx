@@ -1,47 +1,32 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
   Check,
-  ChevronDown,
   ClipboardList,
   Headphones,
-  Menu,
   MessageCircle,
   Minus,
   Plus,
   ShieldCheck,
   Trash2,
   X,
-  Zap,
 } from "lucide-react";
 import { useStore } from "./store";
+import { Brand } from "./brand";
+import { Navigation } from "./navigation";
+import { BrandIntro } from "./brand-intro";
+import dynamic from "next/dynamic";
+const ProductQuickView = dynamic(
+  () => import("./product-quick-view").then((m) => m.ProductQuickView),
+  { ssr: false },
+);
 import { quoteMessage, whatsappUrl, money } from "@/lib/catalog";
-export function Brand() {
-  return (
-    <span className="brand">
-      <span className="brand-symbol">
-        <Zap fill="currentColor" strokeWidth={1.3} />
-      </span>
-      <span>
-        <b>
-          CSI<span className="brand-dot">.</span>
-        </b>
-        <small>ELETROLAR</small>
-      </span>
-    </span>
-  );
-}
 export function SiteShell({ children }: { children: React.ReactNode }) {
-  const { quote, drawer, setDrawer, notice } = useStore();
-  const [menu, setMenu] = useState(false);
-  const path = usePathname();
-  const count = Object.values(quote).reduce((a, b) => a + b, 0);
-  useEffect(() => setMenu(false), [path]);
+  const { setDrawer, notice, previewId } = useStore();
   return (
     <>
       <a className="skip-link" href="#conteudo">
@@ -54,56 +39,24 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           & climatização
         </span>
       </div>
-      <header className="header">
-        <div className="container header-inner">
-          <Link href="/" aria-label="CSI Eletrolar, início">
-            <Brand />
-          </Link>
-          <nav
-            className={menu ? "nav open" : "nav"}
-            aria-label="Navegação principal"
-          >
-            <Link className={path === "/" ? "active" : ""} href="/">
-              Início
-            </Link>
-            <Link
-              className={path === "/catalogo" ? "active" : ""}
-              href="/catalogo"
-            >
-              Catálogo <ChevronDown size={13} />
-            </Link>
-            <Link href="/#sobre">Sobre a CSI</Link>
-            <Link href="/#contato">Contato</Link>
-          </nav>
-          <div className="header-actions">
-            <button
-              className="quote-trigger"
-              onClick={() => setDrawer(true)}
-              aria-label={`Minha lista, ${count} itens`}
-            >
-              <ClipboardList size={19} />
-              <span>Minha lista</span>
-              <b>{count}</b>
-            </button>
-            <button
-              className="button small header-contact"
-              onClick={() => setDrawer(true)}
-            >
-              Peça seu orçamento <ArrowUpRight size={16} />
-            </button>
-            <button
-              className="icon-button mobile-menu"
-              onClick={() => setMenu(!menu)}
-              aria-expanded={menu}
-              aria-label="Abrir menu"
-            >
-              {menu ? <X /> : <Menu />}
-            </button>
-          </div>
-        </div>
-      </header>
+      <BrandIntro />
+      <Navigation />
       <main id="conteudo">{children}</main>
-      <footer id="contato">
+      <footer id="contato" className="premium-footer">
+        <div className="container footer-manifesto">
+          <span className="eyebrow">DO PRIMEIRO FIO AO CLIMA IDEAL.</span>
+          <p>
+            Boas conexões.
+            <br />
+            <span>Novas possibilidades.</span>
+          </p>
+          <button
+            aria-label="Abrir lista de orçamento"
+            onClick={() => setDrawer(true)}
+          >
+            <ArrowUpRight size={38} />
+          </button>
+        </div>
         <div className="container footer-main">
           <div>
             <Link href="/">
@@ -135,7 +88,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             <h4>Vamos tirar seu projeto do papel?</h4>
             <p>Monte sua lista e solicite um atendimento.</p>
             <button onClick={() => setDrawer(true)}>
-              Começar meu orçamento <ArrowRight size={16} />
+              Orçamento pelo WhatsApp <MessageCircle size={16} />
             </button>
           </div>
         </div>
@@ -169,12 +122,22 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         )}
       </AnimatePresence>
       <QuoteDrawer />
+      {previewId && <ProductQuickView />}
     </>
   );
 }
 function QuoteDrawer() {
-  const { products, quote, quantity, clear, drawer, setDrawer, setNotice } =
-    useStore();
+  const {
+    products,
+    quote,
+    quantity,
+    clear,
+    drawer,
+    setDrawer,
+    setNotice,
+    notes,
+    setNotes,
+  } = useStore();
   const closeRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const [copied, setCopied] = useState(false);
@@ -182,7 +145,12 @@ function QuoteDrawer() {
     const product = products.find((p) => p.id === id);
     return product ? [{ product, quantity }] : [];
   });
-  const url = whatsappUrl(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "", lines);
+  const url = whatsappUrl(
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
+    lines,
+    notes,
+  );
+  useEffect(() => setCopied(false), [notes, quote]);
   useEffect(() => {
     if (!drawer) return;
     const previous = document.activeElement as HTMLElement;
@@ -192,7 +160,7 @@ function QuoteDrawer() {
       if (e.key === "Escape") setDrawer(false);
       if (e.key === "Tab") {
         const els = panelRef.current?.querySelectorAll<HTMLElement>(
-          "button:not([disabled]),a[href],input",
+          "button:not([disabled]),a[href],input,textarea,summary",
         );
         if (!els?.length) return;
         const first = els[0],
@@ -303,6 +271,20 @@ function QuoteDrawer() {
                     Sem pagamento online. Preços e disponibilidade serão
                     confirmados no atendimento.
                   </p>
+                  <div className="quote-notes">
+                    <label htmlFor="quote-notes">
+                      Um detalhe que faz a diferença?
+                    </label>
+                    <textarea
+                      id="quote-notes"
+                      maxLength={1000}
+                      rows={2}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Conte sobre seu projeto, entrega ou preferências…"
+                    />
+                    <span>{notes.length}/1000 · Observações opcionais</span>
+                  </div>
                   {url ? (
                     <a
                       className="button whatsapp-button"
@@ -324,7 +306,7 @@ function QuoteDrawer() {
                         onClick={async () => {
                           try {
                             await navigator.clipboard.writeText(
-                              quoteMessage(lines),
+                              quoteMessage(lines, notes),
                             );
                             setCopied(true);
                             setNotice("Mensagem de orçamento copiada.");
@@ -344,7 +326,7 @@ function QuoteDrawer() {
                       </button>
                       <details className="message-details">
                         <summary>Visualizar mensagem</summary>
-                        <pre>{quoteMessage(lines)}</pre>
+                        <pre>{quoteMessage(lines, notes)}</pre>
                       </details>
                     </>
                   )}

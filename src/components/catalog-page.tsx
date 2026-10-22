@@ -13,9 +13,11 @@ import {
 } from "lucide-react";
 import { useStore } from "./store";
 import { ProductCard } from "./product-card";
+import { motion } from "framer-motion";
+import { CatalogSkeleton } from "./catalog-skeleton";
 import { filterProducts } from "@/lib/catalog";
 export function CatalogPage() {
-  const { products, categories, setDrawer } = useStore();
+  const { products, categories, setDrawer, ready } = useStore();
   const params = useSearchParams(),
     router = useRouter();
   const category = params.get("categoria") || "todos";
@@ -160,14 +162,21 @@ export function CatalogPage() {
             <span className="status-dot" /> CATÁLOGO DEMONSTRATIVO{" "}
             <span>Imagens e preços ilustrativos.</span>
           </div>
-          {results.length ? (
-            <div
+          {!ready ? (
+            <CatalogSkeleton />
+          ) : results.length ? (
+            <motion.div
+              key={`${category}-${sort}-${deferred}`}
+              initial={{ opacity: 0.45, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              aria-busy={deferred !== query}
               className={`product-grid catalog-products ${list ? "list-view" : ""}`}
             >
               {results.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
-            </div>
+            </motion.div>
           ) : (
             <div className="empty-state">
               <Search size={42} />

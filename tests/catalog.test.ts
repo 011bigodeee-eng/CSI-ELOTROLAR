@@ -25,8 +25,8 @@ test("mensagem mantém nomes e quantidades, sem afirmar preços reais", () => {
     { product: demoProducts[1], quantity: 2 },
   ];
   const message = quoteMessage(lines);
-  assert.match(message, /1\. Cabo flexível 2,5 mm² — 3 un\./);
-  assert.match(message, /2\. Ar-condicionado Split Inverter — 2 un\./);
+  assert.match(message, /1\. Cabo flexível — 3 un\./);
+  assert.match(message, /2\. Ar-condicionado split — 2 un\./);
   assert.match(message, /confirmem os preços/);
   const url = whatsappUrl("55 (11) 99999-0000", lines);
   assert.ok(url?.startsWith("https://wa.me/5511999990000?text="));
@@ -45,4 +45,27 @@ test("dados demonstrativos têm IDs únicos, categorias e imagens locais", () =>
     assert.ok(!p.price || p.price > 0);
   }
   assert.equal(categories.length, 8);
+});
+test("orçamento inclui observações sem alterar nomes e limita o texto", () => {
+  const lines = [{ product: demoProducts[0], quantity: 2 }];
+  const notes = "Entregar pela manhã.\nConfirmar modelo compatível.";
+  const message = quoteMessage(lines, notes);
+  assert.match(
+    message,
+    /Observações:\nEntregar pela manhã\.\nConfirmar modelo compatível\./,
+  );
+  assert.equal(
+    decodeURIComponent(
+      whatsappUrl("5511999990000", lines, notes)!.split("?text=")[1],
+    ),
+    message,
+  );
+  assert.ok(!quoteMessage(lines, "  ").includes("Observações:"));
+  assert.ok(!quoteMessage(lines, "X".repeat(1500)).includes("X".repeat(1001)));
+});
+test("dados iniciais não inventam preços nem números técnicos", () => {
+  for (const p of demoProducts) {
+    assert.equal(p.price, undefined);
+    assert.ok(!/\d/.test(p.name));
+  }
 });

@@ -2,209 +2,31 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
-  ClipboardList,
   Headphones,
   Lightbulb,
-  MoveUpRight,
-  ShieldCheck,
   Snowflake,
-  Truck,
   Zap,
 } from "lucide-react";
 import { useStore } from "./store";
 import { ProductCard } from "./product-card";
+import { CinematicHero } from "./cinematic-hero";
+import { EditorialCategories } from "./editorial-categories";
+import { Differentials } from "./differentials";
 const reveal = {
-  initial: { opacity: 0, y: 22 },
-  whileInView: { opacity: 1, y: 0 },
+  initial: false,
+  whileInView: { opacity: [0.7, 1], y: [18, 0] },
   viewport: { once: true, amount: 0.1 },
   transition: { duration: 0.55 },
 };
 export function Home() {
-  const { products, categories, setDrawer } = useStore();
+  const { products, setDrawer } = useStore();
   return (
     <>
-      <section className="hero">
-        <div className="hero-grid" />
-        <div className="container hero-inner">
-          <motion.div
-            className="hero-copy"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <span className="hero-eyebrow">
-              <span /> CONECTANDO IDEIAS. TRANSFORMANDO AMBIENTES.
-            </span>
-            <h1>
-              Potência para criar.
-              <br />
-              Conforto para{" "}
-              <span>
-                viver
-                <svg viewBox="0 0 240 14" aria-hidden="true">
-                  <path
-                    d="M3 10Q110-6 236 7"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="5"
-                  />
-                </svg>
-                .
-              </span>
-            </h1>
-            <p>Energia, tecnologia e climatização para seus projetos.</p>
-            <p className="hero-description">
-              Do detalhe da instalação ao clima perfeito. Encontre as soluções
-              que conectam o seu projeto ao próximo nível.
-            </p>
-            <div className="hero-buttons">
-              <Link className="button yellow" href="/catalogo">
-                Explorar catálogo <ArrowUpRight size={20} />
-              </Link>
-              <button
-                className="hero-secondary"
-                onClick={() => setDrawer(true)}
-              >
-                Monte seu orçamento <ArrowRight size={17} />
-              </button>
-            </div>
-            <div className="hero-trust">
-              <span>
-                <ShieldCheck size={17} /> Escolhas com confiança
-              </span>
-              <i />
-              <span>
-                <Headphones size={17} /> Atendimento que conecta
-              </span>
-            </div>
-          </motion.div>
-          <motion.div
-            className="hero-art"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.15 }}
-          >
-            <div className="art-circle circle-one" />
-            <div className="art-circle circle-two" />
-            <div className="art-orbit" />
-            <span className="art-cross cross-one">+</span>
-            <span className="art-cross cross-two">+</span>
-            <div className="hero-card climate-card">
-              <span className="mini-icon">
-                <Snowflake size={16} />
-              </span>
-              <div>
-                <small>O CLIMA CERTO</small>
-                <strong>
-                  Mais conforto.
-                  <br />
-                  Menos consumo.
-                </strong>
-              </div>
-              <ArrowUpRight size={19} />
-            </div>
-            <img
-              className="hero-ac"
-              src="/products/ar-condicionado.svg"
-              alt="Ilustração de ar-condicionado split"
-            />
-            <img
-              className="hero-cable"
-              src="/products/cabos.svg"
-              alt="Ilustração de rolo de cabo elétrico azul"
-            />
-            <img
-              className="hero-bulb"
-              src="/products/lampada.svg"
-              alt="Ilustração de lâmpada LED"
-            />
-            <div className="hero-card energy-card">
-              <span>
-                <Zap size={18} fill="currentColor" />
-              </span>
-              <div>
-                <strong>Seu projeto, energizado.</strong>
-                <small>SOLUÇÕES DO INÍCIO AO FIM</small>
-              </div>
-            </div>
-            <span className="art-caption">
-              ELÉTRICA + ILUMINAÇÃO + CLIMATIZAÇÃO
-            </span>
-          </motion.div>
-        </div>
-        <div className="hero-bottom container">
-          <span>ESCOLHAS INTELIGENTES. GRANDES POSSIBILIDADES.</span>
-          <Link href="#categorias">
-            Descubra a CSI <ArrowDown size={14} />
-          </Link>
-        </div>
-      </section>
-      <div className="benefits">
-        <div className="container benefit-grid">
-          <div>
-            <Zap />
-            <span>
-              <strong>Tudo para o seu projeto</strong>
-              <small>Elétrica e climatização em um só lugar</small>
-            </span>
-          </div>
-          <div>
-            <ShieldCheck />
-            <span>
-              <strong>Qualidade em cada escolha</strong>
-              <small>Soluções para diferentes necessidades</small>
-            </span>
-          </div>
-          <div>
-            <Headphones />
-            <span>
-              <strong>Atendimento próximo</strong>
-              <small>Uma conversa, a solução certa</small>
-            </span>
-          </div>
-          <div>
-            <ClipboardList />
-            <span>
-              <strong>Orçamento sem complicação</strong>
-              <small>Selecione, envie e vamos conversar</small>
-            </span>
-          </div>
-        </div>
-      </div>
-      <section id="categorias" className="section container">
-        <motion.div {...reveal} className="section-heading">
-          <div>
-            <span className="eyebrow">ENCONTRE A SOLUÇÃO CERTA</span>
-            <h2>
-              Um universo de possibilidades<span>.</span>
-            </h2>
-            <p>Da energia que move ao conforto que transforma.</p>
-          </div>
-          <Link className="text-link" href="/catalogo">
-            Ver todas as categorias <ArrowUpRight size={18} />
-          </Link>
-        </motion.div>
-        <motion.div {...reveal} className="category-grid">
-          {categories.map((c, i) => (
-            <Link
-              href={`/catalogo?categoria=${c.id}`}
-              className="category-card"
-              key={c.id}
-            >
-              <span className="category-number">0{i + 1}</span>
-              <img src={`/products/${c.image}.svg`} alt="" loading="lazy" />
-              <div>
-                <h3>{c.short}</h3>
-                <ArrowUpRight size={17} />
-              </div>
-            </Link>
-          ))}
-        </motion.div>
-      </section>
+      <CinematicHero />
+      <EditorialCategories />
       <section className="featured-section">
         <div className="container">
           <motion.div {...reveal} className="section-heading">
@@ -236,6 +58,7 @@ export function Home() {
           </motion.div>
         </div>
       </section>
+      <Differentials />
       <section className="container solutions-section">
         <motion.div {...reveal} className="solution-banner electric-banner">
           <div>

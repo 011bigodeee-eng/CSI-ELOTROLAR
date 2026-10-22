@@ -12,8 +12,14 @@ import {
   type Product,
   type Category,
 } from "@/lib/catalog";
+import { MotionConfig } from "framer-motion";
 import { localCatalogRepository } from "@/lib/repository";
 type Store = {
+  ready: boolean;
+  previewId: string | null;
+  setPreviewId: (id: string | null) => void;
+  notes: string;
+  setNotes: (notes: string) => void;
   products: Product[];
   categories: Category[];
   quote: Record<string, number>;
@@ -33,6 +39,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [quote, setQuote] = useState<Record<string, number>>({}),
     [drawer, setDrawer] = useState(false),
     [notice, setNotice] = useState("");
+  const [ready, setReady] = useState(false),
+    [previewId, setPreviewId] = useState<string | null>(null),
+    [notes, setNotesState] = useState("");
+  function setNotes(value: string) {
+    setNotesState(value.slice(0, 1000));
+    try {
+      sessionStorage.setItem("csi-quote-notes-v1", value.slice(0, 1000));
+    } catch {}
+  }
   useEffect(() => {
     const data = localCatalogRepository.load();
     setProducts(data.products);
@@ -54,6 +69,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           ),
         );
     } catch {}
+    try {
+      setNotesState(
+        (sessionStorage.getItem("csi-quote-notes-v1") || "").slice(0, 1000),
+      );
+    } catch {}
+    setReady(true);
   }, []);
   useEffect(() => {
     if (notice) {
@@ -99,23 +120,30 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }
   return (
-    <Context.Provider
-      value={{
-        products,
-        categories,
-        quote,
-        drawer,
-        setDrawer,
-        add,
-        quantity,
-        clear: () => update({}),
-        save,
-        notice,
-        setNotice,
-      }}
-    >
-      {children}
-    </Context.Provider>
+    <MotionConfig reducedMotion="user">
+      <Context.Provider
+        value={{
+          ready,
+          previewId,
+          setPreviewId,
+          notes,
+          setNotes,
+          products,
+          categories,
+          quote,
+          drawer,
+          setDrawer,
+          add,
+          quantity,
+          clear: () => update({}),
+          save,
+          notice,
+          setNotice,
+        }}
+      >
+        {children}
+      </Context.Provider>
+    </MotionConfig>
   );
 }
 export function useStore() {

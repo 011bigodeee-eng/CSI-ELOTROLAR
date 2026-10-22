@@ -24,9 +24,7 @@ test("catálogo, orçamento, painel protegido, CRUD e experiência móvel", asyn
   const search = page.getByRole("textbox", { name: "Pesquisar produtos" });
   await search.fill("lampada");
   await expect(page.locator(".product-card")).toHaveCount(1);
-  await expect(page.locator(".product-card h3")).toHaveText(
-    "Lâmpada LED bulbo 12 W",
-  );
+  await expect(page.locator(".product-card h3")).toHaveText("Lâmpada LED");
   await search.fill("não existe");
   await expect(page.getByText("Nenhum produto por aqui.")).toBeVisible();
   await page.getByRole("button", { name: "Limpar busca e filtros" }).click();
@@ -36,19 +34,19 @@ test("catálogo, orçamento, painel protegido, CRUD e experiência móvel", asyn
     .click();
   await expect(page.locator(".product-card")).toHaveCount(1);
   await page
-    .getByRole("button", { name: "Adicionar à lista: Cabo flexível 2,5 mm²" })
+    .getByRole("button", { name: "Adicionar à lista: Cabo flexível" })
     .click();
   await page.getByRole("button", { name: /Minha lista/ }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await page
     .getByRole("button", {
-      name: "Aumentar quantidade de Cabo flexível 2,5 mm²",
+      name: "Aumentar quantidade de Cabo flexível",
     })
     .click();
   await expect(page.locator(".quantity span")).toHaveText("2");
   await page.getByText("Visualizar mensagem").click();
   await expect(page.locator(".message-details pre")).toContainText(
-    "Cabo flexível 2,5 mm² — 2 un.",
+    "Cabo flexível — 2 un.",
   );
   await page.getByRole("button", { name: "Fechar lista" }).click();
   await page.reload();

@@ -67,71 +67,66 @@ export const categories: Category[] = [
 export const demoProducts: Product[] = [
   {
     id: "p1",
-    name: "Cabo flexível 2,5 mm²",
+    name: "Cabo flexível",
     description:
-      "Rolo de 100 metros para instalações elétricas. Especificações ilustrativas, sujeitas à confirmação.",
+      "Exemplo visual de fio e cabo para seu projeto. Consulte os modelos, bitolas e aplicações disponíveis.",
     category: "cabos",
-    price: 189.9,
     image: "/products/cabos.svg",
     featured: true,
-    badge: "Mais procurado",
+    badge: "Linha elétrica",
   },
   {
     id: "p2",
-    name: "Ar-condicionado Split Inverter",
+    name: "Ar-condicionado split",
     description:
-      "Modelo demonstrativo de 12.000 BTUs, com tecnologia inverter e operação silenciosa. Disponibilidade a confirmar.",
+      "Exemplo visual de climatização. Consulte os modelos disponíveis e a solução adequada ao seu ambiente.",
     category: "ar",
     image: "/products/ar-condicionado.svg",
     featured: true,
-    badge: "Tecnologia inverter",
+    badge: "Climatização",
   },
   {
     id: "p3",
-    name: "Disjuntor tripolar 32 A",
+    name: "Disjuntor tripolar",
     description:
-      "Proteção para circuitos elétricos, curva C e montagem em trilho DIN. Consulte adequação ao seu projeto.",
+      "Exemplo visual de proteção elétrica. Especificações e adequação ao projeto devem ser confirmadas no atendimento.",
     category: "disjuntores",
-    price: 64.9,
     image: "/products/disjuntor.svg",
     featured: true,
   },
   {
     id: "p4",
-    name: "Lâmpada LED bulbo 12 W",
+    name: "Lâmpada LED",
     description:
-      "Iluminação de uso geral, luz branca e base E27. Produto ilustrativo para apresentação do catálogo.",
+      "Exemplo visual de iluminação LED. Consulte os formatos e características dos produtos disponíveis.",
     category: "iluminacao",
-    price: 14.9,
     image: "/products/lampada.svg",
     featured: true,
-    badge: "Economia de energia",
+    badge: "Iluminação",
   },
   {
     id: "p5",
-    name: "Tomada de embutir 20 A",
+    name: "Tomada de embutir",
     description:
-      "Conjunto de tomada com placa branca e padrão brasileiro de três pinos. Modelo demonstrativo.",
+      "Exemplo visual de tomada para instalações elétricas. Consulte os modelos e aplicações disponíveis.",
     category: "tomadas",
-    price: 24.9,
     image: "/products/tomada.svg",
     featured: false,
   },
   {
     id: "p6",
-    name: "Ventilador de mesa 40 cm",
+    name: "Ventilador de mesa",
     description:
-      "Ventilação para ambientes internos, com ajuste de inclinação. Modelo demonstrativo.",
+      "Exemplo visual de ventilação para ambientes internos. Características e disponibilidade sob consulta.",
     category: "ventilacao",
-    price: 179.9,
     image: "/products/ventilador.svg",
     featured: false,
   },
   {
     id: "p7",
-    name: "Quadro de distribuição 12 módulos",
+    name: "Quadro de distribuição",
     description:
-      "Organização de circuitos e instalação em trilho DIN. Capacidade e especificações a confirmar.",
+      "Exemplo visual de organização de circuitos. Consulte as dimensões e especificações adequadas ao seu projeto.",
     category: "instalacao",
     image: "/products/instalacao.svg",
     featured: false,
@@ -151,7 +146,7 @@ export const money = (value: number) =>
     value,
   );
 export type QuoteLine = { product: Product; quantity: number };
-export function quoteMessage(lines: QuoteLine[]) {
+export function quoteMessage(lines: QuoteLine[], notes = "") {
   return [
     "Olá, CSI Eletrolar! Gostaria de solicitar um orçamento:",
     "",
@@ -160,14 +155,15 @@ export function quoteMessage(lines: QuoteLine[]) {
         `${i + 1}. ${product.name} — ${quantity} un.`,
     ),
     "",
+    ...(notes.trim() ? ["Observações:", notes.trim().slice(0, 1000), ""] : []),
     "Por favor, confirmem os preços, a disponibilidade e as condições de entrega.",
     "Pedido gerado pela prévia demonstrativa do catálogo.",
   ].join("\n");
 }
-export function whatsappUrl(phone: string, lines: QuoteLine[]) {
+export function whatsappUrl(phone: string, lines: QuoteLine[], notes = "") {
   const digits = phone.replace(/\D/g, "");
   if (!/^55\d{10,11}$/.test(digits)) return null;
-  return `https://wa.me/${digits}?text=${encodeURIComponent(quoteMessage(lines))}`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(quoteMessage(lines, notes))}`;
 }
 export function filterProducts(
   products: Product[],

@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
+const manrope = localFont({
+  src: "./fonts/manrope-latin.woff2",
+  variable: "--font-manrope",
+  display: "swap",
+  weight: "200 800",
+});
 import "./globals.css";
+import "./premium.css";
 import { StoreProvider } from "@/components/store";
 import { SiteShell } from "@/components/shell";
 export const metadata: Metadata = {
@@ -18,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>
+      <body className={manrope.variable}>
         <StoreProvider>
           <SiteShell>{children}</SiteShell>
         </StoreProvider>
