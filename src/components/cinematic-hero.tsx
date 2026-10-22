@@ -1,173 +1,157 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect, type PointerEvent } from "react";
+import { useRef, useState, type PointerEvent, type CSSProperties } from "react";
 import {
   motion,
   useMotionValue,
   useSpring,
   useMotionTemplate,
-  useReducedMotion,
+  useScroll,
+  useTransform,
 } from "framer-motion";
 import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  Lightbulb,
   ShieldCheck,
-  Snowflake,
   Zap,
 } from "lucide-react";
 import { useStore } from "./store";
 import { Magnetic, useFinePointer } from "./interactions";
-import { INTRO_COMPLETE_EVENT } from "@/lib/intro";
-
-const spots = [
-  {
-    id: "ar",
-    label: "Climatização",
-    text: "O clima certo para o seu ambiente.",
-    icon: Snowflake,
-    className: "spot-climate",
-  },
-  {
-    id: "cabos",
-    label: "Fios e cabos",
-    text: "Conexões para dar vida ao seu projeto.",
-    icon: Zap,
-    className: "spot-cables",
-  },
-  {
-    id: "iluminacao",
-    label: "Iluminação",
-    text: "Uma nova luz para cada possibilidade.",
-    icon: Lightbulb,
-    className: "spot-light",
-  },
+import { HeroProductScene } from "./hero-product-scene";
+import type { HeroProductId } from "@/lib/hero-scene";
+const circuitPaths = [
+  "M740 0V100L830 190H1050L1160 300H1440",
+  "M1440 480H1280L1200 560H1070L1000 630V760",
+  "M900 0V75L970 145H1190L1270 225H1440",
+  "M1440 530H1310L1210 630H1120L1070 680V760",
+  "M0 600H75L115 640H230",
+  "M1160 0V48L1210 98H1440",
 ];
 export function CinematicHero() {
   const { setDrawer } = useStore();
-  const enabled = useFinePointer(),
-    reduced = useReducedMotion();
-  const [active, setActive] = useState("ar");
-  const [entered, setEntered] = useState(false);
-  useEffect(() => {
-    const reveal = () => setEntered(true);
-    if (!window.__CSI_INTRO__?.active) reveal();
-    else window.addEventListener(INTRO_COMPLETE_EVENT, reveal, { once: true });
-    return () => window.removeEventListener(INTRO_COMPLETE_EVENT, reveal);
-  }, []);
-  const px = useMotionValue(68),
-    py = useMotionValue(42),
-    rx = useMotionValue(0),
-    ry = useMotionValue(0);
-  const rotateX = useSpring(rx, { stiffness: 90, damping: 24 }),
-    rotateY = useSpring(ry, { stiffness: 90, damping: 24 });
-  const light = useMotionTemplate`radial-gradient(650px circle at ${px}% ${py}%, rgba(28,111,255,.22), transparent 72%)`;
+  const enabled = useFinePointer();
+  const root = useRef<HTMLElement>(null);
+  const [hovered, setHovered] = useState<HeroProductId | null>(null),
+    [focused, setFocused] = useState<HeroProductId | null>(null);
+  const active = hovered ?? focused;
+  const px = useMotionValue(0),
+    py = useMotionValue(0);
+  const pointerX = useSpring(px, { stiffness: 75, damping: 25 }),
+    pointerY = useSpring(py, { stiffness: 75, damping: 25 });
+  const glowX = useTransform(pointerX, [-1, 1], ["20%", "90%"]),
+    glowY = useTransform(pointerY, [-1, 1], ["15%", "80%"]);
+  const light = useMotionTemplate`radial-gradient(600px circle at ${glowX} ${glowY},rgba(27,112,255,.21),transparent 73%)`;
+  const rotateX = useTransform(pointerY, [-1, 1], [2.5, -2.5]),
+    rotateY = useTransform(pointerX, [-1, 1], [-3.5, 3.5]);
+  const { scrollYProgress } = useScroll({
+    target: root,
+    offset: ["start start", "end start"],
+  });
+  const scrollDepth = useTransform(scrollYProgress, [0, 1], [0, 42]);
   function move(e: PointerEvent<HTMLElement>) {
     if (!enabled) return;
     const r = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width,
-      y = (e.clientY - r.top) / r.height;
-    px.set(x * 100);
-    py.set(y * 100);
-    rx.set((0.5 - y) * 5);
-    ry.set((x - 0.5) * 7);
+    px.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    py.set(((e.clientY - r.top) / r.height) * 2 - 1);
   }
-  const word = {
-    reveal: { y: ["105%", 0], opacity: [0.2, 1] },
-    shown: { y: 0, opacity: 1 },
-  };
+  function word(text: string, order: number) {
+    return (
+      <span className="word-clip" key={text}>
+        <span
+          className="hero-word-reveal"
+          style={{ "--word-order": order } as CSSProperties}
+        >
+          {text}&nbsp;
+        </span>
+      </span>
+    );
+  }
   return (
     <section
-      className="cinematic-hero"
+      ref={root}
+      className="cinematic-hero hero-evolution"
+      data-active-product={active || ""}
+      data-has-active={active !== null}
       onPointerMove={move}
       onPointerLeave={() => {
-        rx.set(0);
-        ry.set(0);
-        px.set(68);
-        py.set(42);
+        px.set(0);
+        py.set(0);
+        setHovered(null);
       }}
     >
-      <div className="hero-noise" />
+      <div className="hero-noise" aria-hidden="true" />
+      <div className="hero-ambient-gradient" aria-hidden="true" />
       <motion.div
         className="hero-light"
         style={{ background: light }}
         aria-hidden="true"
       />
-      <div className="energy-particles" aria-hidden="true">
-        {Array.from({ length: 12 }, (_, i) => (
+      <svg
+        className="hero-circuit-lines"
+        viewBox="0 0 1440 760"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <linearGradient id="csi-hero-circuit">
+            <stop stopColor="#1269d6" stopOpacity="0" />
+            <stop offset=".55" stopColor="#5c9cf3" stopOpacity=".5" />
+            <stop offset="1" stopColor="#1b4f89" stopOpacity=".2" />
+          </linearGradient>
+        </defs>
+        {circuitPaths.map((d, i) => (
+          <path
+            key={d}
+            d={d}
+            pathLength={1}
+            style={{ "--circuit-order": i } as CSSProperties}
+          />
+        ))}
+      </svg>
+      <div className="energy-particles hero-energy" aria-hidden="true">
+        {Array.from({ length: 10 }, (_, i) => (
           <i
             key={i}
             style={{
-              left: `${12 + ((i * 29) % 80)}%`,
-              top: `${12 + ((i * 17) % 73)}%`,
-              animationDelay: `${i * -0.7}s`,
+              left: `${8 + ((i * 29) % 85)}%`,
+              top: `${11 + ((i * 17) % 76)}%`,
+              animationDelay: `${i * -0.9}s`,
             }}
           />
         ))}
       </div>
       <div className="container cinematic-inner">
         <div className="cinematic-copy">
-          <div className="hero-edition">
+          <div className="hero-edition hero-arrival">
             <span className="status-dot" /> CONEXÕES QUE TRANSFORMAM{" "}
             <span className="edition-rule" /> CSI ELETROLAR
           </div>
-          <motion.h1
-            initial={false}
-            animate={entered && !reduced ? "reveal" : "shown"}
-            transition={{ staggerChildren: 0.09, delayChildren: 0.12 }}
-            aria-label="Potência para criar. Conforto para viver."
-          >
+          <h1 aria-label="Potência para criar. Conforto para viver.">
             <span className="hero-title-line">
-              {["Potência", "para", "criar."].map((w) => (
-                <span className="word-clip" key={w}>
-                  <motion.span
-                    variants={word}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {w}&nbsp;
-                  </motion.span>
-                </span>
-              ))}
+              {["Potência", "para", "criar."].map((w, i) => word(w, i))}
             </span>
             <span className="hero-title-line">
-              {["Conforto", "para"].map((w) => (
-                <span className="word-clip" key={w}>
-                  <motion.span
-                    variants={word}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {w}&nbsp;
-                  </motion.span>
-                </span>
-              ))}
+              {["Conforto", "para"].map((w, i) => word(w, i + 3))}
               <span className="word-clip living-word">
-                <motion.span
-                  variants={word}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                <span
+                  className="hero-word-reveal"
+                  style={{ "--word-order": 5 } as CSSProperties}
                 >
                   viver<span className="living-dot">.</span>
-                </motion.span>
+                </span>
                 <svg viewBox="0 0 200 16" aria-hidden="true">
-                  <motion.path
-                    initial={false}
-                    animate={{ pathLength: entered && !reduced ? [0, 1] : 1 }}
-                    transition={{ delay: 0.9, duration: 0.8 }}
+                  <path
+                    className="hero-living-underline"
+                    pathLength={1}
                     d="M3 11Q95-3 195 6"
                   />
                 </svg>
               </span>
             </span>
-          </motion.h1>
-          <motion.div
-            initial={false}
-            animate={
-              entered && !reduced
-                ? { opacity: [0.65, 1], y: [15, 0] }
-                : { opacity: 1, y: 0 }
-            }
-            transition={{ delay: 0.5, duration: 0.7 }}
-          >
+          </h1>
+          <div className="hero-lead-arrival hero-arrival">
             <p className="cinematic-lead">
               Energia, tecnologia e climatização
               <br className="desktop-break" /> para seus projetos.
@@ -177,91 +161,76 @@ export function CinematicHero() {
               <br />
               Explore soluções que dão vida às suas ideias.
             </p>
-            <div className="cinematic-actions">
-              <Magnetic>
-                <Link className="button yellow" href="/catalogo">
-                  Explorar catálogo <ArrowUpRight size={19} />
-                </Link>
-              </Magnetic>
-              <Magnetic>
-                <button
-                  className="button ghost-button"
-                  onClick={() => setDrawer(true)}
-                >
-                  Monte seu orçamento <ArrowRight size={18} />
-                </button>
-              </Magnetic>
-            </div>
-            <div className="cinematic-assurance">
-              <ShieldCheck size={16} />
-              <span>Seu projeto merece as escolhas certas.</span>
-            </div>
-          </motion.div>
+          </div>
+          <div className="cinematic-actions hero-actions-arrival hero-arrival">
+            <Magnetic>
+              <Link
+                className="button yellow hero-primary-button"
+                href="/catalogo"
+              >
+                <span>Explorar catálogo</span>
+                <span className="hero-button-icon">
+                  <ArrowUpRight size={19} />
+                </span>
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <button
+                className="button ghost-button hero-secondary-button"
+                onClick={() => setDrawer(true)}
+              >
+                <span>Monte seu orçamento</span>
+                <ArrowRight size={18} />
+              </button>
+            </Magnetic>
+          </div>
+          <div className="cinematic-assurance hero-assurance-arrival hero-arrival">
+            <ShieldCheck size={17} />
+            <span>Seu projeto merece as escolhas certas.</span>
+          </div>
         </div>
         <motion.div
-          className="product-stage"
-          style={enabled ? { rotateX, rotateY } : undefined}
-          aria-label="Explore nossas soluções"
+          className="hero-stage-scroll"
+          style={{ y: enabled ? scrollDepth : 0 }}
         >
-          <div className="stage-orbit orbit-outer" />
-          <div className="stage-orbit orbit-inner" />
-          <div className="stage-axis axis-horizontal" />
-          <div className="stage-axis axis-vertical" />
-          <span className="stage-coordinate">
-            ELÉTRICA / ILUMINAÇÃO / CLIMATIZAÇÃO
-          </span>
-          <div className="stage-glow" />
-          <div
-            className={`render-composition active-${active}`}
-            aria-hidden="true"
+          <motion.div
+            className="hero-stage-tilt"
+            style={
+              enabled
+                ? { rotateX, rotateY, transformPerspective: 1200 }
+                : undefined
+            }
           >
-            {["ac", "cable", "bulb"].map((name, i) => (
-              <div key={name} className={`render-layer render-${name}`}>
-                <img
-                  src="/images/hero-products.webp"
-                  alt=""
-                  width={1024}
-                  height={1536}
-                  fetchPriority={i === 0 ? "high" : "auto"}
-                />
-              </div>
-            ))}
-          </div>
-          {spots.map(({ id, label, text, icon: Icon, className }) => (
-            <Link
-              key={id}
-              href={`/catalogo?categoria=${id}`}
-              className={`product-spot ${className} ${active === id ? "is-active" : ""}`}
-              onMouseEnter={() => setActive(id)}
-              onFocus={() => setActive(id)}
-            >
-              <span className="spot-marker">
-                <Icon size={16} />
-              </span>
-              <span className="spot-info">
-                <small>EXPLORE A LINHA</small>
-                <strong>{label}</strong>
-                <span>{text}</span>
-              </span>
-              <ArrowUpRight className="spot-arrow" size={15} />
-            </Link>
-          ))}
-          <span className="stage-caption">
-            Imagens conceituais · produtos sob consulta
-          </span>
+            <HeroProductScene
+              active={active}
+              enabled={enabled}
+              pointerX={pointerX}
+              pointerY={pointerY}
+              onHover={setHovered}
+              onFocus={setFocused}
+            />
+          </motion.div>
         </motion.div>
       </div>
-      <div className="container cinematic-bottom">
-        <span>
-          <b>01</b> DO PRIMEIRO FIO AO CLIMA IDEAL.
+      <div className="container cinematic-bottom hero-footer">
+        <span className="hero-footer-caption">
+          <span className="hero-footer-line" />
+          <b>DO PRIMEIRO FIO AO CLIMA IDEAL.</b>
         </span>
-        <Link href="#categorias">
-          Explore as possibilidades <ArrowDown size={15} />
+        <Link className="hero-scroll-cue" href="#categorias">
+          <span className="hero-scroll-icon">
+            <ArrowDown size={17} />
+          </span>
+          <span>
+            Explore as possibilidades
+            <small>Seu próximo projeto começa aqui.</small>
+          </span>
         </Link>
         <span className="hero-bottom-signature">
-          <Zap size={12} /> FEITO PARA CONECTAR.
+          <Zap size={13} /> FEITO PARA CONECTAR.
         </span>
       </div>
+      <div className="hero-section-edge" aria-hidden="true" />
     </section>
   );
 }

@@ -115,7 +115,7 @@ test("responsividade, teclado, movimento reduzido e menu mobile", async ({
   await expect(page.locator(".brand-intro")).toBeHidden();
   expect(
     await page
-      .locator(".render-ac")
+      .locator(".hero-product-climate .hero-product-float")
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
   for (const width of [320, 390, 620, 768, 1024, 1440]) {
