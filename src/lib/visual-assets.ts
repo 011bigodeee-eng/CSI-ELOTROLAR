@@ -3,8 +3,8 @@ import manifest from "./visual-assets.generated.json";
 export const officialLogo = manifest.logo as string | null;
 export const officialFavicon = manifest.favicon as string | null;
 const photos = manifest.products as Record<string, string>;
-export function productPhoto(key: string): string | undefined {
-  return photos[key];
+export function heroProductPhoto(key: string): string | undefined {
+  return (manifest.heroProducts as Record<string, string>)[key];
 }
 export function resolveProductImage(src: string): string {
   const legacy = /^\/products\/([a-z-]+)\.svg$/.exec(src);

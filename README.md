@@ -97,9 +97,9 @@ A arte original recebida no ZIP `IMG_7694.JPG.zip` foi instalada em `public/bran
 O comando `npm run assets:prepare`, executado antes de dev/build, valida os arquivos e gera `src/lib/visual-assets.generated.json`. Imagens inválidas ou nomes duplicados interrompem a preparação. Instruções de entrega:
 
 - [Logo e favicon](public/brand/README.md).
-- [Oito fotografias de produto ainda pendentes](public/products/fotos/README.md).
+- [Imagens de produtos — quatro atualizadas, quatro pendentes](public/products/fotos/README.md).
 - [Oito fotografias editoriais de categorias ainda pendentes](public/images/categories/README.md).
 
-As imagens anteriores de produtos continuam presentes: nenhuma fotografia nova foi fornecida e a geração de imagens falhou. Uploads personalizados, produtos, preços, categorias e listas são preservados.
+Foram substituídas as quatro imagens dos destaques (cabo, split, disjuntor e lâmpada) por imagens geradas com aparência fotográfica em WebP, aproximadamente 94 kB no total. Continuam identificadas como ilustrativas. Tomada, ventilador, quadro, tubo de cobre e categorias ainda usam as imagens anteriores. Uploads personalizados, produtos, preços, categorias e listas são preservados. As imagens com fundo branco não substituem os objetos flutuantes da hero: essa composição recebe somente ativos com canal alfa.
 
 Para conferir a implantação da Vercel, abra `/api/version`. A resposta sem cache informa o commit de `VERCEL_GIT_COMMIT_SHA` e se a logo oficial entrou no build. Localmente o commit é `local`. Esse endpoint não expõe credenciais nem dados do proprietário. Um redeploy de uma implantação antiga continua utilizando o código antigo; confira o commit na implantação de produção e a branch `main` do repositório correto.

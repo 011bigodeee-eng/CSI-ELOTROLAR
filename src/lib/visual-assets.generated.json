@@ -1,6 +1,12 @@
 {
   "logo": "/brand/logo-oficial.jpg",
   "favicon": null,
-  "products": {},
+  "products": {
+    "cabos": "/products/fotos/cabos.webp",
+    "ar-condicionado": "/products/fotos/ar-condicionado.webp",
+    "disjuntor": "/products/fotos/disjuntor.webp",
+    "lampada": "/products/fotos/lampada.webp"
+  },
+  "heroProducts": {},
   "categories": {}
 }

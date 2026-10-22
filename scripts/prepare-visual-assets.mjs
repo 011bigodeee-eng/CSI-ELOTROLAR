@@ -36,11 +36,18 @@ const assets = {
   logo: await find("brand/logo-oficial"),
   favicon: await find("brand/favicon-oficial"),
   products: {},
+  heroProducts: {},
   categories: {},
 };
 for (const key of keys) {
   const path = await find(`products/fotos/${key}`);
-  if (path) assets.products[key] = path;
+  if (path) {
+    assets.products[key] = path;
+    const { hasAlpha } = await sharp(
+      resolve(root, "public", path.slice(1)),
+    ).metadata();
+    if (hasAlpha) assets.heroProducts[key] = path;
+  }
 }
 for (const key of [
   "cabos",

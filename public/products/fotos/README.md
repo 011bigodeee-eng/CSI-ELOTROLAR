@@ -1,6 +1,6 @@
-# Fotografias pendentes — 0 de 8 substituídas
+# Imagens fotográficas — 4 de 8 substituídas
 
-Não há fotografias reais fornecidas no projeto. A geração de imagens falhou nesta sessão, por isso nenhum novo arquivo fotográfico foi criado e as imagens atuais foram preservadas.
+Foram geradas e instaladas imagens com aparência fotográfica para cabo azul, split, disjuntor tripolar e lâmpada LED. São imagens ilustrativas geradas, não fotografias de modelos confirmados do estoque. As quatro imagens WebP têm 627×627 px e somam aproximadamente 94 kB. Origem: geração de estúdio sem marcas, com cada produto exportado de sua célula e convertido para WebP sem alterações de proporção.
 
 Forneça imagens próprias/autorizadas (ou geradas com aparência fotográfica, identificadas como ilustrativas). Use apenas uma extensão por nome: WebP/AVIF preferenciais, PNG/JPG/JPEG também aceitos.
 
@@ -20,3 +20,5 @@ Padrão: produto inteiro e centralizado, sem textos artificiais/marcas d'água, 
 Após adicionar os arquivos, `npm run assets:prepare` (também executado em dev/build) conecta os ativos disponíveis ao catálogo, detalhes, orçamento, painel, mega menu, banners e três produtos da hero. Os recortes da composição anterior só permanecem enquanto cada foto correspondente estiver ausente. As categorias editoriais continuam usando a montagem conceitual atual; uma sessão de fotos reais dos oito contextos também permanece pendente.
 
 Os dados locais não são apagados: referências exatas às ilustrações padrão recebem a nova imagem em tempo de renderização. Uploads e URLs personalizados do proprietário são preservados. Rótulos de demonstração continuam ativos; nenhuma imagem comprova modelo, marca ou disponibilidade vendidos pela empresa.
+
+Os quatro arquivos instalados têm fundo branco. Eles são usados nos cards, detalhes e demais áreas com imagens de produto, mantendo os rótulos ilustrativos. A hero só aceita substitutos com canal alfa para preservar a composição flutuante sem retângulos brancos; continua usando sua composição anterior. Faltam as fotos de tomada, ventilador, quadro e tubo de cobre, além das fotos editoriais das categorias.

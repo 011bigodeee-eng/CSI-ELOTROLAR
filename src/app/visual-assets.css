@@ -140,3 +140,7 @@
   object-fit: contain;
   object-position: center;
 }
+
+.product-visual:has(img[data-photo]) {
+  background: #fff;
+}

@@ -13,9 +13,7 @@ test("busca sugere resultados reais de outras categorias e imagens quebradas tê
     .click();
   await expect(page).toHaveURL(/categoria=iluminacao/);
   await expect(page.locator(".product-card")).toHaveCount(1);
-  await page.route("**/products/iluminacao.svg", (route) => route.abort());
-  await page.reload();
-  await page.route("**/products/*.svg", (route) => route.abort());
+  await page.route("**/products/fotos/*.webp", (route) => route.abort());
   await page.reload();
   await expect(page.locator(".product-image-fallback").first()).toBeVisible();
   await page

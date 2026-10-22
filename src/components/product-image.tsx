@@ -24,6 +24,7 @@ export function ProductImage({
   return (
     <img
       {...props}
+      data-photo={src.startsWith("/products/fotos/") || undefined}
       src={src}
       alt={alt}
       decoding="async"

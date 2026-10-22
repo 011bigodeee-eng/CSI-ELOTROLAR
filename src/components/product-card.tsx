@@ -28,7 +28,7 @@ export function ProductCard({ product: p }: { product: Product }) {
         )}
         <ProductImage
           src={p.image}
-          alt={`Ilustração de ${p.name}`}
+          alt={`Imagem ilustrativa de ${p.name}`}
           loading="lazy"
         />
         <button

@@ -1,5 +1,5 @@
 "use client";
-import { productPhoto } from "@/lib/visual-assets";
+import { heroProductPhoto } from "@/lib/visual-assets";
 import Link from "next/link";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, Lightbulb, Snowflake, Zap } from "lucide-react";
@@ -31,7 +31,7 @@ function ProductObject({
   const x = useTransform(pointerX, [-1, 1], [-10 * p.depth, 10 * p.depth]);
   const y = useTransform(pointerY, [-1, 1], [-7 * p.depth, 7 * p.depth]);
   const chosen = active === p.id;
-  const photo = productPhoto(
+  const photo = heroProductPhoto(
     p.id === "ar"
       ? "ar-condicionado"
       : p.id === "iluminacao"
