@@ -89,3 +89,17 @@ A evolução da hero usa janelas CSS sobre a composição original, preservando 
 - Painel preserva autenticação no servidor e armazenamento local. Uploads verificam formato, tamanho e decodificação; o salvamento aguarda a validação. Campo opcional de informações técnicas aparece na visualização rápida somente quando preenchido. Catálogos existentes permanecem compatíveis. As alterações **não são publicadas para outros visitantes**.
 
 Validação adicional em `tests/premium-v2.spec.ts`: sugestões entre categorias, recuperação de falha de imagem, respostas por teclado com movimento reduzido, rejeição de imagem corrompida e persistência das informações técnicas.
+
+### Identidade oficial e fotografias — integração preparada, arquivos pendentes
+
+A logo enviada como imagem na conversa não está disponível como arquivo no workspace. Não foi redesenhada nem substituída. Também não foram fornecidas fotografias reais; a geração de novas imagens falhou. **Nesta entrega: nenhuma logo oficial e nenhuma fotografia foram efetivamente substituídas.** As imagens anteriores continuam visíveis.
+
+O comando `npm run assets:prepare`, executado antes de dev/build, valida os arquivos entregues e gera `src/lib/visual-assets.generated.json`. Arquivos inválidos ou nomes duplicados interrompem a preparação, evitando publicar referências quebradas. Caminhos e instruções:
+
+- [Logo e favicon originais](public/brand/README.md).
+- [Oito fotos de produtos](public/products/fotos/README.md).
+- [Oito fotos editoriais de categorias](public/images/categories/README.md).
+
+Os componentes estão preparados para aplicar a marca completa sobre uma base clara, inclusive em fundos escuros, sem recortar, recolorir ou deformar o mascote. A composição da intro aceita a logo oficial inteira e mantém as proteções de primeira pintura e acessibilidade. A aparência final dessa variante depende da revisão com a arte original. O favicon preserva a URL `/icon.svg` e usa o ícone oficial (ou a logo completa) quando fornecido.
+
+As novas fotos, quando entregues, substituem apenas referências às imagens padrão. Uploads personalizados, produtos, preços, categorias e listas existentes permanecem preservados. A hero troca cada recorte antigo por uma foto independente conforme os arquivos chegam. Os rótulos de demonstração continuam ativos e não comprovam marca, modelo ou disponibilidade.

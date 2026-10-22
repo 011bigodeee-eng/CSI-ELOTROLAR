@@ -17,6 +17,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { ProductImage } from "./product-image";
 import { useStore } from "./store";
 import { money, type Product } from "@/lib/catalog";
 export function AdminLogin({ configured }: { configured: boolean }) {
@@ -373,7 +374,7 @@ export function AdminPanel() {
                     <tr key={p.id}>
                       <td>
                         <div className="table-product">
-                          <img src={p.image} alt="" />
+                          <ProductImage src={p.image} alt="" />
                           <div>
                             <b>{p.name}</b>
                             <small>{p.description}</small>
@@ -623,7 +624,10 @@ export function AdminPanel() {
                 }
               />
               <div className="image-upload">
-                <img src={editing.image} alt="Prévia da imagem do produto" />
+                <ProductImage
+                  src={editing.image}
+                  alt="Prévia da imagem do produto"
+                />
                 <label htmlFor="product-image">
                   <ImagePlus size={20} />
                   <b>Adicionar imagem</b>

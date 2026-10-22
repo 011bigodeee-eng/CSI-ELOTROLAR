@@ -1,4 +1,5 @@
 "use client";
+import { categoryPhoto } from "@/lib/visual-assets";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useStore } from "./store";
@@ -35,6 +36,7 @@ export function EditorialCategories() {
       <div className="editorial-grid">
         {ordered.map((c, i) => {
           const visual = categoryVisual(c.id);
+          const photo = categoryPhoto(c.id);
           return (
             <Reveal
               key={c.id}
@@ -46,17 +48,23 @@ export function EditorialCategories() {
                 href={`/catalogo?categoria=${encodeURIComponent(c.id)}`}
               >
                 <img
-                  src="/images/category-scenes.webp"
+                  src={photo || "/images/category-scenes.webp"}
                   alt=""
                   width={1536}
                   height={1024}
                   loading="lazy"
                   decoding="async"
-                  className="editorial-photo"
-                  style={{
-                    left: visual.position.startsWith("100%") ? "-100%" : "0",
-                    top: visual.position.endsWith("100%") ? "-100%" : "0",
-                  }}
+                  className={`editorial-photo ${photo ? "editorial-photo-real" : ""}`}
+                  style={
+                    photo
+                      ? undefined
+                      : {
+                          left: visual.position.startsWith("100%")
+                            ? "-100%"
+                            : "0",
+                          top: visual.position.endsWith("100%") ? "-100%" : "0",
+                        }
+                  }
                 />
                 <div className="editorial-overlay" />
                 <span className="category-kicker">

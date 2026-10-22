@@ -10,6 +10,9 @@ import {
   Snowflake,
   Zap,
 } from "lucide-react";
+import { ProductImage } from "./product-image";
+import { Brand } from "./brand";
+import { officialLogo } from "@/lib/visual-assets";
 import { useStore } from "./store";
 import { ProductCard } from "./product-card";
 import { CinematicHero } from "./cinematic-hero";
@@ -74,7 +77,10 @@ export function Home() {
               Explore a linha elétrica <ArrowUpRight size={18} />
             </Link>
           </div>
-          <img src="/products/cabos.svg" alt="Ilustração de cabo elétrico" />
+          <ProductImage
+            src="/products/cabos.svg"
+            alt="Imagem de referência de cabo elétrico"
+          />
         </motion.div>
         <motion.div {...reveal} className="solution-banner climate-banner">
           <div>
@@ -88,9 +94,9 @@ export function Home() {
               Conheça a linha de climatização <ArrowUpRight size={18} />
             </Link>
           </div>
-          <img
+          <ProductImage
             src="/products/ar-condicionado.svg"
-            alt="Ilustração de ar-condicionado"
+            alt="Imagem de referência de ar-condicionado"
           />
           <Snowflake className="banner-snow" />
         </motion.div>
@@ -99,13 +105,19 @@ export function Home() {
         <motion.div {...reveal} className="about-visual">
           <div className="about-blueprint" />
           <span className="about-top">A ENERGIA POR TRÁS DO SEU PROJETO</span>
-          <div className="about-logo">
-            <Zap fill="currentColor" />
-            <strong>
-              CSI<span>.</span>
-            </strong>
-            <small>E L E T R O L A R</small>
-          </div>
+          {officialLogo ? (
+            <div className="about-official-brand">
+              <Brand />
+            </div>
+          ) : (
+            <div className="about-logo">
+              <Zap fill="currentColor" />
+              <strong>
+                CSI<span>.</span>
+              </strong>
+              <small>E L E T R O L A R</small>
+            </div>
+          )}
           <div className="about-stamp">
             <Check size={18} /> ELÉTRICA & CLIMATIZAÇÃO
           </div>

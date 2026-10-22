@@ -11,6 +11,7 @@ import "./premium.css";
 import "./intro.css";
 import "./hero-evolution.css";
 import "./premium-v2.css";
+import "./visual-assets.css";
 import { BrandIntro } from "@/components/brand-intro";
 import { INTRO_BOOTSTRAP, INTRO_CRITICAL_CSS } from "@/lib/intro";
 import { StoreProvider } from "@/components/store";
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "Explore a prévia do catálogo CSI Eletrolar. Materiais elétricos, iluminação e climatização em um só lugar.",
   robots: { index: false, follow: false },
+  icons: { icon: "/icon.svg" },
 };
 export default function RootLayout({
   children,

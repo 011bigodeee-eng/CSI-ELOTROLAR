@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { officialLogo } from "@/lib/visual-assets";
 import { Brand } from "./brand";
 import type { CSSProperties } from "react";
 const routes = [
@@ -113,7 +114,9 @@ export function BrandIntro() {
           <br />
           começa com uma conexão.
         </span>
-        <div className="intro-mark">
+        <div
+          className={`intro-mark ${officialLogo ? "intro-mark-official" : ""}`}
+        >
           <div className="intro-mark-outline" aria-hidden="true">
             <Brand />
           </div>

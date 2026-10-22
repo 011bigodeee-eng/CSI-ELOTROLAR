@@ -1,4 +1,5 @@
 "use client";
+import { productPhoto } from "@/lib/visual-assets";
 import Link from "next/link";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, Lightbulb, Snowflake, Zap } from "lucide-react";
@@ -30,6 +31,13 @@ function ProductObject({
   const x = useTransform(pointerX, [-1, 1], [-10 * p.depth, 10 * p.depth]);
   const y = useTransform(pointerY, [-1, 1], [-7 * p.depth, 7 * p.depth]);
   const chosen = active === p.id;
+  const photo = productPhoto(
+    p.id === "ar"
+      ? "ar-condicionado"
+      : p.id === "iluminacao"
+        ? "lampada"
+        : "cabos",
+  );
   return (
     <motion.div
       className={`hero-product-depth hero-product-${p.className}`}
@@ -64,16 +72,18 @@ function ProductObject({
             onFocus={() => onFocus(p.id)}
             onBlur={() => onFocus(null)}
           >
-            <span className="hero-product-crop">
+            <span
+              className={`hero-product-crop ${photo ? "hero-product-photo" : ""}`}
+            >
               <img
                 className="hero-product-image"
-                src="/images/hero-products.webp"
+                src={photo || "/images/hero-products.webp"}
                 alt=""
                 width={1024}
                 height={1536}
                 fetchPriority={p.order === 0 ? "high" : "auto"}
                 decoding="async"
-                style={cropStyle(p.source)}
+                style={photo ? undefined : cropStyle(p.source)}
               />
             </span>
             <span

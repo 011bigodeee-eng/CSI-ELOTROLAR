@@ -14,6 +14,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useStore } from "./store";
+import { ProductImage } from "./product-image";
 import { Brand } from "./brand";
 export function Navigation() {
   const { quote, categories, setDrawer } = useStore();
@@ -166,7 +167,7 @@ export function Navigation() {
                           onClick={close}
                         >
                           <span className="mega-product-image">
-                            <img
+                            <ProductImage
                               src={`/products/${c.image}.svg`}
                               alt=""
                               width={56}

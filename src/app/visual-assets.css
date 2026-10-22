@@ -1,0 +1,142 @@
+/* The supplied artwork is contained whole. A white presentation plate supports both themes without recoloring or recreating it. */
+.brand.brand-official {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 94px;
+  height: 78px;
+  flex-shrink: 0;
+  gap: 0;
+  background: #fff;
+  border-radius: 10px;
+  padding: 4px;
+  overflow: hidden;
+}
+.brand.brand-official img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+  transform: none;
+  filter: none;
+}
+.footer .brand-official {
+  width: 155px;
+  height: 155px;
+}
+.about-official-brand {
+  position: absolute;
+  inset: 20%;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+.about-official-brand .brand-official {
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  padding: 12px;
+  border-radius: 18px;
+}
+.intro-mark.intro-mark-official {
+  width: min(70vw, 330px);
+  height: min(36vh, 330px);
+  overflow: visible;
+}
+.intro-mark-official .brand.brand-official {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  transform: none;
+  border-radius: 22px;
+}
+.intro-mark-official .intro-mark-outline {
+  display: none;
+}
+.intro-mark-official .intro-mark-solid {
+  animation: official-mark-arrive 1s var(--csi-intro-logo) ease-out both;
+  filter: drop-shadow(0 0 22px #2675f466) drop-shadow(0 0 45px #ffdf3726);
+}
+.intro-mark-official .intro-mark-solid .brand-official img {
+  animation: none;
+}
+.intro-mark-official .intro-logo-sweep {
+  border-radius: 22px;
+}
+.intro-story:has(.intro-mark-official) .intro-typography {
+  top: calc(50% + min(18vh, 165px) + 20px);
+}
+@keyframes official-mark-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-product-photo {
+  display: block;
+}
+.hero-product-photo .hero-product-image {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: center;
+}
+.product-card .product-visual {
+  background: #f5f7fa;
+}
+.product-card .product-visual > img {
+  object-fit: contain;
+  max-width: 90%;
+  max-height: 80%;
+  transition: transform 0.5s ease;
+}
+.product-card:hover .product-visual > img {
+  transform: scale(1.035);
+}
+@media (max-width: 760px) {
+  .brand.brand-official {
+    width: 76px;
+    height: 60px;
+    padding: 3px;
+  }
+  .intro-mark-official .brand.brand-official {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+  }
+  .about-official-brand .brand-official {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+  }
+  .footer .brand-official {
+    width: 140px;
+    height: 140px;
+  }
+  .intro-mark.intro-mark-official {
+    width: min(65vw, 260px);
+    height: min(34vh, 260px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-mark-official .intro-mark-solid {
+    animation: none;
+  }
+  .product-card .product-visual > img {
+    transition: none;
+  }
+}
+.editorial-photo.editorial-photo-real {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
