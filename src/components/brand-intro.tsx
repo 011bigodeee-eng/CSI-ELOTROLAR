@@ -98,6 +98,12 @@ export function BrandIntro() {
           })}
         </div>
         <div className="intro-ambient-pulse" />
+        <div className="intro-convergence" aria-hidden="true">
+          {Array.from({ length: 8 }, (_, i) => (
+            <i key={i} style={{ "--ray": i } as CSSProperties} />
+          ))}
+        </div>
+        <div className="intro-volumetric-light" aria-hidden="true" />
         <div className="intro-impact-ring" />
         <div className="intro-impact-ring impact-yellow" />
       </div>

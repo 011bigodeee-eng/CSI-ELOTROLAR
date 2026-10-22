@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, useRef, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -116,6 +116,9 @@ export function AdminPanel() {
     [deleteId, setDeleteId] = useState<string | null>(null),
     [uploadError, setUploadError] = useState("");
   const router = useRouter();
+  const uploadVersion = useRef(0);
+  const [uploading, setUploading] = useState(false);
+  const [savedAt, setSavedAt] = useState("");
   useEffect(() => {
     if (!editing && !deleteId) return;
     const previous = document.activeElement as HTMLElement;
@@ -156,9 +159,21 @@ export function AdminPanel() {
   }
   function submit(e: FormEvent) {
     e.preventDefault();
-    if (!editing) return;
+    if (!editing || uploading) return;
     if (!editing.name.trim() || !editing.description.trim()) {
       setUploadError("Preencha o nome e a descrição.");
+      return;
+    }
+    if (
+      !categories.some((c) => c.id === editing.category) ||
+      (editing.price !== undefined &&
+        (!Number.isFinite(editing.price) ||
+          editing.price <= 0 ||
+          editing.price > 10000000))
+    ) {
+      setUploadError(
+        "Selecione uma categoria válida e informe um preço positivo ou deixe em branco.",
+      );
       return;
     }
     const p = {
@@ -177,11 +192,19 @@ export function AdminPanel() {
     ) {
       setEditing(null);
       setNotice("Produto salvo nesta prévia.");
+      setSavedAt(
+        new Intl.DateTimeFormat("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(new Date()),
+      );
     }
   }
   async function upload(file?: File) {
     if (!file || !editing) return;
     setUploadError("");
+    const version = ++uploadVersion.current;
+    setUploading(false);
     if (
       !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
       file.size > 2 * 1024 * 1024
@@ -189,12 +212,35 @@ export function AdminPanel() {
       setUploadError("Use PNG, JPG ou WebP de até 2 MB.");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () =>
-      setEditing((p) => (p ? { ...p, image: String(reader.result) } : p));
-    reader.onerror = () => setUploadError("Não foi possível ler a imagem.");
-    reader.readAsDataURL(file);
+    setUploading(true);
+    try {
+      const data = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error("read"));
+        reader.readAsDataURL(file);
+      });
+      const image = new Image();
+      image.src = data;
+      await image.decode();
+      if (
+        !image.naturalWidth ||
+        !image.naturalHeight ||
+        image.naturalWidth * image.naturalHeight > 40000000
+      )
+        throw new Error("dimensions");
+      if (version === uploadVersion.current)
+        setEditing((p) => (p ? { ...p, image: data } : p));
+    } catch {
+      if (version === uploadVersion.current)
+        setUploadError(
+          "Imagem inválida ou muito grande. Use uma imagem legível de até 40 megapixels.",
+        );
+    } finally {
+      if (version === uploadVersion.current) setUploading(false);
+    }
   }
+
   function categorySubmit(e: FormEvent) {
     e.preventDefault();
     const name = categoryName.trim();
@@ -263,6 +309,12 @@ export function AdminPanel() {
           <strong>{products.filter((p) => p.featured).length}</strong>
           <span>Produtos em destaque</span>
         </div>
+      </div>
+      <div className="admin-save-status" role="status">
+        <Check size={16} />
+        {savedAt
+          ? `Último produto salvo às ${savedAt} neste navegador.`
+          : "Suas alterações ficam salvas neste navegador."}
       </div>
       <div className="admin-tabs">
         <button
@@ -510,6 +562,19 @@ export function AdminPanel() {
                   setEditing({ ...editing, description: e.target.value })
                 }
               />
+              <label htmlFor="product-specifications">
+                Informações técnicas · opcional
+              </label>
+              <textarea
+                id="product-specifications"
+                rows={3}
+                maxLength={1200}
+                value={editing.specifications || ""}
+                onChange={(e) =>
+                  setEditing({ ...editing, specifications: e.target.value })
+                }
+                placeholder="Cadastre somente informações confirmadas do fabricante."
+              />
               <div className="form-grid">
                 <div>
                   <label htmlFor="product-category">Categoria</label>
@@ -562,7 +627,11 @@ export function AdminPanel() {
                 <label htmlFor="product-image">
                   <ImagePlus size={20} />
                   <b>Adicionar imagem</b>
-                  <small>PNG, JPG ou WebP · até 2 MB</small>
+                  <small>
+                    {uploading
+                      ? "Validando imagem…"
+                      : "PNG, JPG ou WebP · até 2 MB"}
+                  </small>
                   <input
                     id="product-image"
                     type="file"
@@ -595,8 +664,9 @@ export function AdminPanel() {
                 >
                   Cancelar
                 </button>
-                <button className="button">
-                  <Check size={17} /> Salvar produto
+                <button className="button" disabled={uploading}>
+                  <Check size={17} />{" "}
+                  {uploading ? "Validando imagem…" : "Salvar produto"}
                 </button>
               </div>
             </form>

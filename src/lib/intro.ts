@@ -3,12 +3,12 @@ export const INTRO_SESSION_KEY = "csi-brand-intro-v1";
 export const INTRO_COMPLETE_EVENT = "csi:intro-complete";
 export const INTRO_TIMELINE = {
   spark: 0,
-  circuits: 700,
-  logo: 1600,
-  impact: 2800,
-  typography: 3600,
-  reveal: 4500,
-  complete: 5300,
+  circuits: 600,
+  logo: 1350,
+  impact: 2500,
+  typography: 3200,
+  reveal: 4300,
+  complete: 5000,
   skip: 240,
   watchdog: 8000,
 } as const;

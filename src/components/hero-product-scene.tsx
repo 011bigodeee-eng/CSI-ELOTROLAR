@@ -76,6 +76,27 @@ function ProductObject({
                 style={cropStyle(p.source)}
               />
             </span>
+            <span
+              className={`product-response response-${p.id}`}
+              aria-hidden="true"
+            >
+              {p.id === "ar" && (
+                <svg viewBox="0 0 300 160">
+                  <path d="M30 35C100 45 130 80 260 55" />
+                  <path d="M20 60C100 65 140 105 280 88" />
+                  <path d="M40 85C110 90 170 125 255 117" />
+                </svg>
+              )}
+              {p.id === "cabos" && (
+                <svg viewBox="0 0 300 260">
+                  <path
+                    pathLength="1"
+                    d="M140 207C50 195 40 145 53 102C68 45 229 30 264 97C290 151 245 184 219 193"
+                  />
+                </svg>
+              )}
+              {p.id === "iluminacao" && <span className="bulb-warmth" />}
+            </span>
             <span className="hero-product-focus-hint">
               Explorar categoria <ArrowUpRight size={13} />
             </span>

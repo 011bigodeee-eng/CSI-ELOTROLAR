@@ -13,6 +13,7 @@ export type Product = {
   image: string;
   featured: boolean;
   badge?: string;
+  specifications?: string;
 };
 export const categories: Category[] = [
   {

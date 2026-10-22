@@ -436,7 +436,7 @@
 /* Expanding energy aperture: the inner diamond removes the overlay from center outward. */
 @keyframes csi-intro-aperture {
   0%,
-  84.89% {
+  86% {
     clip-path: polygon(
       evenodd,
       0 0,
@@ -827,7 +827,7 @@ html[data-csi-intro-lite="true"] .intro-phrase > span {
   }
   @keyframes csi-intro-curtain {
     0%,
-    84.89% {
+    86% {
       clip-path: inset(0);
     }
     100% {

@@ -10,6 +10,7 @@ import "./globals.css";
 import "./premium.css";
 import "./intro.css";
 import "./hero-evolution.css";
+import "./premium-v2.css";
 import { BrandIntro } from "@/components/brand-intro";
 import { INTRO_BOOTSTRAP, INTRO_CRITICAL_CSS } from "@/lib/intro";
 import { StoreProvider } from "@/components/store";

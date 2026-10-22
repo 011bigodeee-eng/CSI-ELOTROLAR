@@ -14,7 +14,12 @@ export function useFinePointer() {
   const [fine, setFine] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const sync = () => setFine(mq.matches);
+    const sync = () =>
+      setFine(
+        mq.matches &&
+          document.documentElement.dataset.csiIntroLite !== "true" &&
+          (!navigator.hardwareConcurrency || navigator.hardwareConcurrency > 4),
+      );
     sync();
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);

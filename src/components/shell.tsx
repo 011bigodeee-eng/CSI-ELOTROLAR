@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useStore } from "./store";
 import { Brand } from "./brand";
+import { ProductImage } from "./product-image";
 import { Navigation } from "./navigation";
 import dynamic from "next/dynamic";
 const ProductQuickView = dynamic(
@@ -221,8 +222,14 @@ function QuoteDrawer() {
               <>
                 <div className="quote-items">
                   {lines.map(({ product: p, quantity: n }) => (
-                    <div className="quote-item" key={p.id}>
-                      <img src={p.image} alt="" />
+                    <motion.div
+                      layout="position"
+                      initial={{ y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="quote-item"
+                      key={p.id}
+                    >
+                      <ProductImage src={p.image} alt="" />
                       <div>
                         <h4>{p.name}</h4>
                         <small>
@@ -254,7 +261,7 @@ function QuoteDrawer() {
                       >
                         <Trash2 size={17} />
                       </button>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
                 <div className="quote-footer">
@@ -263,7 +270,14 @@ function QuoteDrawer() {
                   </button>
                   <div className="quote-summary">
                     <span>Produtos selecionados</span>
-                    <b>{lines.reduce((s, l) => s + l.quantity, 0)} unidades</b>
+                    <motion.b
+                      key={lines.reduce((s, l) => s + l.quantity, 0)}
+                      initial={{ y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      aria-live="polite"
+                    >
+                      {lines.reduce((s, l) => s + l.quantity, 0)} unidades
+                    </motion.b>
                   </div>
                   <p>
                     Sem pagamento online. Preços e disponibilidade serão
@@ -336,7 +350,11 @@ function QuoteDrawer() {
               </>
             ) : (
               <div className="empty-state">
-                <ClipboardList size={48} />
+                <span className="quote-empty-art">
+                  <ClipboardList size={48} />
+                  <span />
+                  <span />
+                </span>
                 <h3>Seu projeto começa aqui.</h3>
                 <p>
                   Explore o catálogo e adicione os produtos que você precisa à

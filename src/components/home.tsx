@@ -127,6 +127,20 @@ export function Home() {
             nosso catálogo e monte uma lista com o que seu projeto precisa. O
             próximo passo começa com uma conversa.
           </p>
+          <div className="about-chapters">
+            <Link href="/catalogo?categoria=cabos">
+              <span>01 / CONECTAR</span>
+              <strong>Da ideia à instalação.</strong>
+              <p>Materiais elétricos para compor seu projeto.</p>
+              <ArrowUpRight size={18} />
+            </Link>
+            <Link href="/catalogo?categoria=ar">
+              <span>02 / TRANSFORMAR</span>
+              <strong>Do espaço ao conforto.</strong>
+              <p>Explore equipamentos e soluções de climatização.</p>
+              <ArrowUpRight size={18} />
+            </Link>
+          </div>
           <div className="about-values">
             <span>
               <Lightbulb size={20} /> Soluções que inspiram

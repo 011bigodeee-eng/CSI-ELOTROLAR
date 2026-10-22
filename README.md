@@ -57,7 +57,7 @@ O catálogo público pode ser apresentado sem banco ou WhatsApp. Para envio real
 ## Redesign premium
 
 - Hero com revelação por palavras, luz acompanhando o cursor, parallax leve por CSS/Motion e três produtos flutuantes. Os atalhos de categoria respondem ao hover e ao foco. Sem WebGL ou bibliotecas 3D adicionais.
-- Abertura da marca em seis cenas e aproximadamente 5,3 segundos, uma única vez por sessão na inicial. `sessionStorage` indisponível ou movimento reduzido liberam a página diretamente. O botão “Pular introdução” funciona inclusive antes da hidratação. Header e hero permanecem ocultos até a revelação.
+- Abertura da marca em seis cenas e aproximadamente 5 segundos, uma única vez por sessão na inicial. `sessionStorage` indisponível ou movimento reduzido liberam a página diretamente. O botão “Pular introdução” funciona inclusive antes da hidratação. Header e hero permanecem ocultos até a revelação.
 - Cabeçalho com vidro sutil, compactação ao rolar, indicador da seção ativa e mega menu alimentado pelas categorias cadastradas. Escape, foco e clique externo fecham o menu.
 - Categorias com imagens conceituais em uma composição editorial; nomes e links seguem os cadastros existentes. Categorias novas recebem uma apresentação genérica, sem sugerir estoque.
 - Visualização rápida em `<dialog>` nativo: foco contido, Escape, retorno do foco, quantidade e indicação de itens já adicionados. O código do modal é carregado sob demanda.
@@ -69,7 +69,7 @@ O WhatsApp continua usando `NEXT_PUBLIC_WHATSAPP_NUMBER`; nenhum contato ou perf
 
 ## Abertura cinematográfica — ordem de carregamento
 
-`src/lib/intro.ts` centraliza os marcos (0 / 700 / 1.600 / 2.800 / 3.600 / 4.500 / 5.300 ms), as regras críticas e o controlador. O script síncrono no `<head>` decide sessão, rota e movimento reduzido antes do HTML do site. Apenas atributos controlados em `<html>` e o `inert` do contêiner são gerenciados fora do React; esses dois pontos têm `suppressHydrationWarning`. O conteúdo e o markup da intro são renderizados no servidor de forma determinística.
+`src/lib/intro.ts` centraliza os marcos (0 / 600 / 1.350 / 2.500 / 3.200 / 4.300 / 5.000 ms), as regras críticas e o controlador. O script síncrono no `<head>` decide sessão, rota e movimento reduzido antes do HTML do site. Apenas atributos controlados em `<html>` e o `inert` do contêiner são gerenciados fora do React; esses dois pontos têm `suppressHydrationWarning`. O conteúdo e o markup da intro são renderizados no servidor de forma determinística.
 
 A intro em `src/components/brand-intro.tsx` reutiliza exatamente o componente `Brand`. `src/app/intro.css` sincroniza o ponto de luz, descarga, circuitos SVG, partículas, contorno/símbolo/letras da marca, onda de energia, tipografia e abertura expansiva. A hero acompanha o estado de conclusão no elemento HTML para revelar título, produtos, cards e, por último, CTAs, inclusive antes da hidratação. Não há áudio automático, WebGL ou dependência nova de animação.
 
@@ -78,3 +78,14 @@ O controlador trata Escape, o botão de pular (transição de 240 ms), mudança 
 Os testes `tests/intro.spec.ts` bloqueiam os chunks do Next.js para validar a cobertura inicial e o botão antes da hidratação, amostram frames para detectar exposição prematura, verificam a duração/sessão/teclado/mobile, simulam falha de armazenamento e de animação e verificam a página sem JavaScript. A duração deve ser alterada nos marcos centralizados, mantendo as porcentagens da abertura da máscara em sincronia com o início da revelação.
 
 A evolução da hero usa janelas CSS sobre a composição original, preservando a proporção dos três produtos. Produtos e cards compartilham destaque por ponteiro e teclado e abrem suas categorias. Em telas pequenas, os cards ficam em uma linha separada; efeitos de profundidade são reduzidos no toque e desativados com movimento reduzido. Os recortes e categorias estão em `src/lib/hero-scene.ts`, a cena em `src/components/hero-product-scene.tsx` e os estilos em `src/app/hero-evolution.css`.
+
+### Evolução Premium 2.0
+
+- Abertura ajustada para 5 segundos, com convergência de energia e luz volumétrica em CSS. Mantém o bloqueio anterior à primeira pintura, o botão de pular sem hidratação, a sessão e o watchdog. Não carrega nem reproduz áudio.
+- Respostas próprias por produto: luz quente da lâmpada, fluxo de ar e percurso de energia no cabo. Foco por teclado também ativa os destaques; toque e movimento reduzido usam efeitos estáticos. Equipamentos com poucos núcleos dispensam parallax.
+- Categorias editoriais com proporções variadas; seção institucional assimétrica, com atalhos reais para elétrica e climatização. Nenhum número empresarial ou certificação foi acrescentado.
+- Busca sugere produtos reais de outras categorias e mantém o termo ao trocar de filtro. Ordenação por preço só aparece quando existem valores cadastrados. Imagens quebradas apresentam alternativa acessível sem bloquear as ações.
+- Orçamento mantém as chaves de armazenamento, observações e geração de WhatsApp; itens e total recebem feedback visual. Sem número configurado, continua disponível a cópia da mensagem.
+- Painel preserva autenticação no servidor e armazenamento local. Uploads verificam formato, tamanho e decodificação; o salvamento aguarda a validação. Campo opcional de informações técnicas aparece na visualização rápida somente quando preenchido. Catálogos existentes permanecem compatíveis. As alterações **não são publicadas para outros visitantes**.
+
+Validação adicional em `tests/premium-v2.spec.ts`: sugestões entre categorias, recuperação de falha de imagem, respostas por teclado com movimento reduzido, rejeição de imagem corrompida e persistência das informações técnicas.

@@ -1,5 +1,5 @@
 "use client";
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -33,6 +33,24 @@ export function CatalogPage() {
         ? (a.price ?? Infinity) - (b.price ?? Infinity)
         : Number(b.featured) - Number(a.featured),
   );
+  const filterTrigger = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!filters) return;
+    function escape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setFilters(false);
+        filterTrigger.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [filters]);
+  const suggestions =
+    deferred.trim() && category !== "todos"
+      ? filterProducts(products, deferred, "todos")
+          .filter((p) => p.category !== category)
+          .slice(0, 3)
+      : [];
   const current = categories.find((c) => c.id === category);
   function select(id: string) {
     router.replace(
@@ -79,7 +97,10 @@ export function CatalogPage() {
         </div>
       </section>
       <section className="container catalog-layout">
-        <aside className={`catalog-sidebar ${filters ? "show" : ""}`}>
+        <aside
+          id="catalog-filters"
+          className={`catalog-sidebar ${filters ? "show" : ""}`}
+        >
           <div className="sidebar-heading">
             <h3>Categorias</h3>
             <button
@@ -124,7 +145,7 @@ export function CatalogPage() {
                     ? "Todos os produtos"
                     : "Categoria não encontrada")}
               </h2>
-              <span>
+              <span role="status" aria-live="polite" aria-atomic="true">
                 {results.length}{" "}
                 {results.length === 1
                   ? "produto encontrado"
@@ -133,6 +154,8 @@ export function CatalogPage() {
             </div>
             <div className="catalog-controls">
               <button
+                ref={filterTrigger}
+                aria-controls="catalog-filters"
                 className="filter-toggle icon-button"
                 onClick={() => setFilters(!filters)}
                 aria-label="Filtrar categorias"
@@ -147,7 +170,9 @@ export function CatalogPage() {
               >
                 <option value="featured">Em destaque</option>
                 <option value="name">Nome: A a Z</option>
-                <option value="price">Menor preço</option>
+                {products.some((p) => p.price !== undefined) && (
+                  <option value="price">Menor preço</option>
+                )}
               </select>
               <button
                 className="icon-button view-toggle"
@@ -160,8 +185,29 @@ export function CatalogPage() {
           </div>
           <div className="demo-notice">
             <span className="status-dot" /> CATÁLOGO DEMONSTRATIVO{" "}
-            <span>Imagens e preços ilustrativos.</span>
+            <span>
+              Imagens conceituais. Valores somente quando cadastrados.
+            </span>
           </div>
+          {suggestions.length > 0 && (
+            <div className="search-suggestions">
+              <span>Também encontramos em outras categorias</span>
+              <div>
+                {suggestions.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      select(p.category);
+                    }}
+                  >
+                    <Search size={14} />
+                    {p.name}
+                    <ArrowRight size={14} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {!ready ? (
             <CatalogSkeleton />
           ) : results.length ? (

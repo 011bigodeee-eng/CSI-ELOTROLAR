@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Minus, Plus, ShieldCheck, X } from "lucide-react";
 import { money } from "@/lib/catalog";
 import { useStore } from "./store";
+import { ProductImage } from "./product-image";
 export function ProductQuickView() {
   const {
     previewId,
@@ -60,7 +61,7 @@ export function ProductQuickView() {
         </button>
         <div className="quick-view-image">
           <span className="eyebrow">EXPLORE CADA POSSIBILIDADE</span>
-          <img
+          <ProductImage
             src={p.image}
             alt={`Imagem demonstrativa de ${p.name}`}
             width={600}
@@ -74,6 +75,12 @@ export function ProductQuickView() {
           </span>
           <h2 id="quick-view-title">{p.name}</h2>
           <p>{p.description}</p>
+          {p.specifications && (
+            <div className="product-specifications">
+              <h3>Informações técnicas</h3>
+              <p>{p.specifications}</p>
+            </div>
+          )}
           <div className="quick-view-price">
             {p.price ? (
               <>

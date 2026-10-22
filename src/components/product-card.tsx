@@ -2,6 +2,7 @@
 import { ArrowUpRight, Plus, Check, Eye } from "lucide-react";
 import { type Product, money } from "@/lib/catalog";
 import { useStore } from "./store";
+import { ProductImage } from "./product-image";
 export function ProductCard({ product: p }: { product: Product }) {
   const { categories, add, quote, setDrawer, setPreviewId } = useStore();
   return (
@@ -25,7 +26,11 @@ export function ProductCard({ product: p }: { product: Product }) {
             Na sua lista · {quote[p.id]}
           </span>
         )}
-        <img src={p.image} alt={`Ilustração de ${p.name}`} loading="lazy" />
+        <ProductImage
+          src={p.image}
+          alt={`Ilustração de ${p.name}`}
+          loading="lazy"
+        />
         <button
           className={`quick-add ${quote[p.id] ? "is-added" : ""}`}
           aria-label={`Adicionar ${p.name} à lista`}
