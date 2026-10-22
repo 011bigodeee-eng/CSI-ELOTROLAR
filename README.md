@@ -50,6 +50,6 @@ Os testes E2E usam credenciais exclusivas de teste no processo temporário do se
 
 ## Vercel
 
-Importe este repositório, selecione **Next.js**, mantenha `npm run build` como comando de build e a saída padrão do framework. Cadastre as variáveis necessárias nas configurações do projeto antes do deploy. Não é necessário `vercel.json`. A configuração atual solicita que buscadores não indexem a prévia; remova essa restrição em `src/app/layout.tsx` apenas quando as informações oficiais estiverem prontas.
+Importe este repositório, selecione **Next.js**, mantenha `npm run build` como comando de build e a saída padrão do framework. Cadastre as variáveis necessárias nas configurações do projeto antes do deploy. O `vercel.json` declara explicitamente o framework Next.js, os comandos de instalação/build e a saída `.next`, inclusive para projetos importados inicialmente como sites estáticos. Em **Root Directory**, use a raiz do repositório (vazio ou `.`), e mantenha a branch de produção `main`. A configuração atual solicita que buscadores não indexem a prévia; remova essa restrição em `src/app/layout.tsx` apenas quando as informações oficiais estiverem prontas.
 
 O catálogo público pode ser apresentado sem banco ou WhatsApp. Para envio real, informe o telefone oficial. Para publicação definitiva, substitua os dados demonstrativos, revise a identidade visual com o cliente e integre persistência/autorização de produção se o proprietário precisar atualizar o catálogo para todos os visitantes.
