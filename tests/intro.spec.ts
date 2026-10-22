@@ -54,11 +54,13 @@ test("seis cenas, revelação completa em aproximadamente 5 segundos e nenhuma r
   });
   await page.goto("/");
   await expect(page.locator("#csi-brand-intro")).toBeVisible();
-  expect(
-    await page
-      .locator(".intro-mark-solid .brand-symbol")
-      .evaluate((el) => getComputedStyle(el).clipPath),
-  ).toContain("polygon");
+  await expect(
+    page.locator(".intro-mark-solid .brand-official img"),
+  ).toHaveAttribute("src", "/brand/logo-oficial.jpg");
+  await expect(page.locator(".intro-mark-solid .brand-official img")).toHaveCSS(
+    "object-fit",
+    "contain",
+  );
   await expect(page.locator("html")).toHaveAttribute("data-csi-intro", "done", {
     timeout: 7000,
   });

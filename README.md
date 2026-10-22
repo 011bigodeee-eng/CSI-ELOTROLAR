@@ -90,16 +90,16 @@ A evolução da hero usa janelas CSS sobre a composição original, preservando 
 
 Validação adicional em `tests/premium-v2.spec.ts`: sugestões entre categorias, recuperação de falha de imagem, respostas por teclado com movimento reduzido, rejeição de imagem corrompida e persistência das informações técnicas.
 
-### Identidade oficial e fotografias — integração preparada, arquivos pendentes
+### Identidade oficial instalada; fotografias pendentes
 
-A logo enviada como imagem na conversa não está disponível como arquivo no workspace. Não foi redesenhada nem substituída. Também não foram fornecidas fotografias reais; a geração de novas imagens falhou. **Nesta entrega: nenhuma logo oficial e nenhuma fotografia foram efetivamente substituídas.** As imagens anteriores continuam visíveis.
+A arte original recebida no ZIP `IMG_7694.JPG.zip` foi instalada em `public/brand/logo-oficial.jpg`, preservando o arquivo integral sem recortar, redesenhar ou modificar o mascote. A marca é compartilhada pelo cabeçalho/mobile, intro, institucional, rodapé e favicon. A placa branca mantém as cores legíveis também sobre fundos escuros. O favicon usa a arte inteira até que a empresa forneça uma versão de ícone aprovada.
 
-O comando `npm run assets:prepare`, executado antes de dev/build, valida os arquivos entregues e gera `src/lib/visual-assets.generated.json`. Arquivos inválidos ou nomes duplicados interrompem a preparação, evitando publicar referências quebradas. Caminhos e instruções:
+O comando `npm run assets:prepare`, executado antes de dev/build, valida os arquivos e gera `src/lib/visual-assets.generated.json`. Imagens inválidas ou nomes duplicados interrompem a preparação. Instruções de entrega:
 
-- [Logo e favicon originais](public/brand/README.md).
-- [Oito fotos de produtos](public/products/fotos/README.md).
-- [Oito fotos editoriais de categorias](public/images/categories/README.md).
+- [Logo e favicon](public/brand/README.md).
+- [Oito fotografias de produto ainda pendentes](public/products/fotos/README.md).
+- [Oito fotografias editoriais de categorias ainda pendentes](public/images/categories/README.md).
 
-Os componentes estão preparados para aplicar a marca completa sobre uma base clara, inclusive em fundos escuros, sem recortar, recolorir ou deformar o mascote. A composição da intro aceita a logo oficial inteira e mantém as proteções de primeira pintura e acessibilidade. A aparência final dessa variante depende da revisão com a arte original. O favicon preserva a URL `/icon.svg` e usa o ícone oficial (ou a logo completa) quando fornecido.
+As imagens anteriores de produtos continuam presentes: nenhuma fotografia nova foi fornecida e a geração de imagens falhou. Uploads personalizados, produtos, preços, categorias e listas são preservados.
 
-As novas fotos, quando entregues, substituem apenas referências às imagens padrão. Uploads personalizados, produtos, preços, categorias e listas existentes permanecem preservados. A hero troca cada recorte antigo por uma foto independente conforme os arquivos chegam. Os rótulos de demonstração continuam ativos e não comprovam marca, modelo ou disponibilidade.
+Para conferir a implantação da Vercel, abra `/api/version`. A resposta sem cache informa o commit de `VERCEL_GIT_COMMIT_SHA` e se a logo oficial entrou no build. Localmente o commit é `local`. Esse endpoint não expõe credenciais nem dados do proprietário. Um redeploy de uma implantação antiga continua utilizando o código antigo; confira o commit na implantação de produção e a branch `main` do repositório correto.
