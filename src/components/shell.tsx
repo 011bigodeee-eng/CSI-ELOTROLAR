@@ -18,7 +18,6 @@ import {
 import { useStore } from "./store";
 import { Brand } from "./brand";
 import { Navigation } from "./navigation";
-import { BrandIntro } from "./brand-intro";
 import dynamic from "next/dynamic";
 const ProductQuickView = dynamic(
   () => import("./product-quick-view").then((m) => m.ProductQuickView),
@@ -39,7 +38,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           & climatização
         </span>
       </div>
-      <BrandIntro />
       <Navigation />
       <main id="conteudo">{children}</main>
       <footer id="contato" className="premium-footer">

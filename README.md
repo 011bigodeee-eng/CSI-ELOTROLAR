@@ -57,7 +57,7 @@ O catálogo público pode ser apresentado sem banco ou WhatsApp. Para envio real
 ## Redesign premium
 
 - Hero com revelação por palavras, luz acompanhando o cursor, parallax leve por CSS/Motion e três produtos flutuantes. Os atalhos de categoria respondem ao hover e ao foco. Sem WebGL ou bibliotecas 3D adicionais.
-- Abertura da marca de aproximadamente 2,2 segundos, uma única vez por sessão na inicial. `sessionStorage` indisponível ou movimento reduzido desabilitam a abertura; ela nunca captura cliques nem trava a navegação.
+- Abertura da marca em seis cenas e aproximadamente 5,3 segundos, uma única vez por sessão na inicial. `sessionStorage` indisponível ou movimento reduzido liberam a página diretamente. O botão “Pular introdução” funciona inclusive antes da hidratação. Header e hero permanecem ocultos até a revelação.
 - Cabeçalho com vidro sutil, compactação ao rolar, indicador da seção ativa e mega menu alimentado pelas categorias cadastradas. Escape, foco e clique externo fecham o menu.
 - Categorias com imagens conceituais em uma composição editorial; nomes e links seguem os cadastros existentes. Categorias novas recebem uma apresentação genérica, sem sugerir estoque.
 - Visualização rápida em `<dialog>` nativo: foco contido, Escape, retorno do foco, quantidade e indicação de itens já adicionados. O código do modal é carregado sob demanda.
@@ -66,3 +66,13 @@ O catálogo público pode ser apresentado sem banco ou WhatsApp. Para envio real
 - `prefers-reduced-motion` desabilita abertura, flutuação e parallax. Dispositivos com ponteiro de toque recebem efeitos simplificados. Animações não controlam o acesso ao conteúdo principal.
 
 O WhatsApp continua usando `NEXT_PUBLIC_WHATSAPP_NUMBER`; nenhum contato ou perfil social foi inventado. O painel e a arquitetura de persistência existentes foram preservados, sem novo backend.
+
+## Abertura cinematográfica — ordem de carregamento
+
+`src/lib/intro.ts` centraliza os marcos (0 / 700 / 1.600 / 2.800 / 3.600 / 4.500 / 5.300 ms), as regras críticas e o controlador. O script síncrono no `<head>` decide sessão, rota e movimento reduzido antes do HTML do site. Apenas atributos controlados em `<html>` e o `inert` do contêiner são gerenciados fora do React; esses dois pontos têm `suppressHydrationWarning`. O conteúdo e o markup da intro são renderizados no servidor de forma determinística.
+
+A intro em `src/components/brand-intro.tsx` reutiliza exatamente o componente `Brand`. `src/app/intro.css` sincroniza o ponto de luz, descarga, circuitos SVG, partículas, contorno/símbolo/letras da marca, onda de energia, tipografia e abertura expansiva. A hero espera o evento de conclusão para iniciar sua revelação. Não há áudio automático, WebGL ou dependência nova de animação.
+
+O controlador trata Escape, o botão de pular (transição de 240 ms), mudança para movimento reduzido, retorno de uma aba suspensa e saída da rota. Todos os timers e listeners são cancelados ao concluir; as animações param quando a camada é ocultada. Se a timeline falhar, um watchdog libera o conteúdo em até oito segundos. Em hardware limitado ou telas pequenas, partículas, desfoque e circuitos são simplificados. Sem JavaScript, o site é exibido diretamente; sem armazenamento, a abertura é dispensada.
+
+Os testes `tests/intro.spec.ts` bloqueiam os chunks do Next.js para validar a cobertura inicial e o botão antes da hidratação, amostram frames para detectar exposição prematura, verificam a duração/sessão/teclado/mobile, simulam falha de armazenamento e de animação e verificam a página sem JavaScript. A duração deve ser alterada nos marcos centralizados, mantendo as porcentagens da abertura da máscara em sincronia com o início da revelação.

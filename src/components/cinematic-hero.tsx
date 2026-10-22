@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useStore } from "./store";
 import { Magnetic, useFinePointer } from "./interactions";
+import { INTRO_COMPLETE_EVENT } from "@/lib/intro";
 
 const spots = [
   {
@@ -49,7 +50,12 @@ export function CinematicHero() {
     reduced = useReducedMotion();
   const [active, setActive] = useState("ar");
   const [entered, setEntered] = useState(false);
-  useEffect(() => setEntered(true), []);
+  useEffect(() => {
+    const reveal = () => setEntered(true);
+    if (!window.__CSI_INTRO__?.active) reveal();
+    else window.addEventListener(INTRO_COMPLETE_EVENT, reveal, { once: true });
+    return () => window.removeEventListener(INTRO_COMPLETE_EVENT, reveal);
+  }, []);
   const px = useMotionValue(68),
     py = useMotionValue(42),
     rx = useMotionValue(0),

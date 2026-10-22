@@ -8,12 +8,12 @@ test("abertura por sessão, mega menu, visualização rápida e observações pe
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto("/");
   await expect(page.locator(".brand-intro")).toBeVisible();
-  await expect(page.locator(".brand-intro")).toHaveCount(0, { timeout: 4000 });
+  await expect(page.locator(".brand-intro")).toBeHidden({ timeout: 7000 });
   await expect(page.locator("h1")).toHaveAccessibleName(
     "Potência para criar. Conforto para viver.",
   );
   await page.reload();
-  await expect(page.locator(".brand-intro")).toHaveCount(0);
+  await expect(page.locator(".brand-intro")).toBeHidden();
   await page
     .getByRole("button", { name: "Abrir categorias do catálogo" })
     .click();
@@ -112,7 +112,7 @@ test("responsividade, teclado, movimento reduzido e menu mobile", async ({
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator(".brand-intro")).toHaveCount(0);
+  await expect(page.locator(".brand-intro")).toBeHidden();
   expect(
     await page
       .locator(".render-ac")

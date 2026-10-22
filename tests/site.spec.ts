@@ -5,6 +5,7 @@ test("catálogo, orçamento, painel protegido, CRUD e experiência móvel", asyn
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
+  await expect(page.locator(".brand-intro")).toBeHidden({ timeout: 7000 });
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Potência para criar",
   );
@@ -128,6 +129,7 @@ test("catálogo, orçamento, painel protegido, CRUD e experiência móvel", asyn
   await expect(page.getByLabel("Senha de acesso")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await expect(page.locator(".brand-intro")).toBeHidden({ timeout: 7000 });
   for (const section of await page.locator("main section").all()) {
     await section.scrollIntoViewIfNeeded();
     await page.waitForTimeout(130);

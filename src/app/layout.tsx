@@ -8,6 +8,9 @@ const manrope = localFont({
 });
 import "./globals.css";
 import "./premium.css";
+import "./intro.css";
+import { BrandIntro } from "@/components/brand-intro";
+import { INTRO_BOOTSTRAP, INTRO_CRITICAL_CSS } from "@/lib/intro";
 import { StoreProvider } from "@/components/store";
 import { SiteShell } from "@/components/shell";
 export const metadata: Metadata = {
@@ -25,11 +28,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <style
+          id="csi-intro-critical"
+          dangerouslySetInnerHTML={{ __html: INTRO_CRITICAL_CSS }}
+        />
+        <script
+          id="csi-intro-bootstrap"
+          dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }}
+        />
+      </head>
       <body className={manrope.variable}>
-        <StoreProvider>
-          <SiteShell>{children}</SiteShell>
-        </StoreProvider>
+        <BrandIntro />
+        <div id="csi-site-shell" suppressHydrationWarning>
+          <StoreProvider>
+            <SiteShell>{children}</SiteShell>
+          </StoreProvider>
+        </div>
       </body>
     </html>
   );

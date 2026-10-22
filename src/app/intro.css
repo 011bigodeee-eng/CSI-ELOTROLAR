@@ -1,0 +1,990 @@
+/* O nascimento da energia. One inherited clock; every delay comes from intro.ts. */
+.brand-intro.csi-intro {
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  align-content: center;
+  pointer-events: auto;
+  overflow: hidden;
+  color: #f3f8ff;
+  font-family: var(--font-manrope), Arial, sans-serif;
+  animation: csi-intro-aperture var(--csi-intro-duration) linear both;
+  will-change: clip-path;
+}
+.intro-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    #0a254c 0%,
+    #040e23 43%,
+    #020918 75%
+  );
+  z-index: -3;
+}
+.intro-backdrop:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#7aadff04 1px, transparent 1px),
+    linear-gradient(90deg, #7aadff04 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(ellipse, #000, transparent 75%);
+}
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 20vmin 9vmin #0106119e;
+  pointer-events: none;
+  z-index: 3;
+}
+.intro-field {
+  position: absolute;
+  inset: 0;
+  perspective: 1000px;
+  pointer-events: none;
+  animation: csi-camera var(--csi-intro-duration) cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+}
+.intro-origin {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  height: 8px;
+  width: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  background: #b5e9ff;
+  box-shadow:
+    0 0 13px 4px #2594ff,
+    0 0 55px 13px #0667ee5c;
+  animation: csi-origin 700ms ease-out both;
+}
+.intro-discharge {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  height: 1px;
+  width: 100vmax;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #126bf5 25%,
+    #b2e9ff 50%,
+    #126bf5 75%,
+    transparent
+  );
+  transform-origin: center;
+  opacity: 0;
+  animation: csi-discharge 420ms 300ms ease-out both;
+  box-shadow: 0 0 13px 2px #328dff66;
+}
+.intro-depth-ring {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  border: 1px solid #3b77b62e;
+  border-radius: 50%;
+  width: 70vmin;
+  height: 70vmin;
+  transform: translate(-50%, -50%) rotateX(30deg) rotateZ(-20deg);
+  animation: csi-depth var(--csi-intro-duration) ease-out both;
+}
+.intro-depth-ring:after {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border: 1px dashed #3b77b622;
+  border-radius: 50%;
+}
+.ring-narrow {
+  height: 48vmin;
+  width: 48vmin;
+  transform: translate(-50%, -50%) rotateX(-20deg) rotateZ(25deg);
+  border-color: #2c6ce01f;
+}
+.intro-circuits {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 4px #3488ff6b);
+  animation: csi-circuits-life var(--csi-intro-duration) linear both;
+}
+.intro-circuits path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.circuit-ghost {
+  stroke: #3572ba;
+  stroke-width: 0.6;
+  opacity: 0.17;
+}
+.circuit-energy {
+  stroke: url(#csi-circuit-energy);
+  stroke-width: 1.15;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: csi-route 1050ms
+    calc(var(--csi-intro-circuits) + var(--route) * 28ms)
+    cubic-bezier(0.22, 0.7, 0.3, 1) both;
+}
+.intro-particle-field {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+}
+.intro-particle-field > i {
+  position: absolute;
+  height: 2px;
+  width: 2px;
+  border-radius: 50%;
+  background: #99cbff;
+  box-shadow: 0 0 7px #569fff9e;
+  animation: csi-particle var(--csi-intro-duration) ease-in-out both;
+  animation-delay: calc(var(--particle) * 8ms);
+}
+.intro-particle-field > i:nth-child(6n) {
+  background: #ffda6d;
+  box-shadow: 0 0 7px #ffc63366;
+  width: 3px;
+  height: 3px;
+}
+.intro-ambient-pulse {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 65vmin;
+  height: 65vmin;
+  background: radial-gradient(circle, #1878f337, transparent 65%);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: csi-volume 900ms var(--csi-intro-impact) ease-out both;
+}
+.intro-impact-ring {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  height: 28vmin;
+  width: 28vmin;
+  border: 1px solid #71b5ff80;
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px #2b87ff20,
+    inset 0 0 18px #2b87ff15;
+  opacity: 0;
+  animation: csi-impact 1000ms var(--csi-intro-impact)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.impact-yellow {
+  border-color: #ffe27847;
+  animation-delay: calc(var(--csi-intro-impact) + 110ms);
+  box-shadow: 0 0 15px #ffd43b12;
+}
+.intro-story {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: min(640px, 90%);
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 2;
+  pointer-events: none;
+  animation: csi-story-camera var(--csi-intro-duration) ease-out both;
+}
+.intro-concept {
+  position: absolute;
+  top: -65px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.9;
+  letter-spacing: 1px;
+  color: #9db7da;
+  animation: csi-concept var(--csi-intro-duration) ease-out both;
+}
+.intro-mark {
+  height: 145px;
+  width: 360px;
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+.intro-mark-outline,
+.intro-mark-solid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.intro-mark .brand {
+  transform: scale(2.2);
+  transform-origin: center;
+  gap: 8px;
+  color: #f4f8ff;
+}
+.intro-mark .brand b {
+  font-size: 36px;
+  letter-spacing: -2px;
+  font-weight: 900;
+  line-height: 0.95;
+}
+.intro-mark .brand small {
+  font-size: 8px;
+  letter-spacing: 3.25px;
+  line-height: 1;
+  margin: 5px 0 0 2px;
+  font-weight: 700;
+}
+.intro-mark .brand-symbol {
+  height: 43px;
+  width: 35px;
+  background: var(--blue);
+  color: white;
+}
+.intro-mark .brand-symbol svg {
+  height: 31px;
+  width: 29px;
+}
+.intro-mark .brand-dot {
+  color: var(--blue);
+}
+.intro-mark-outline {
+  opacity: 0;
+  animation: csi-outline 1250ms var(--csi-intro-logo) ease-out both;
+}
+.intro-mark-outline .brand-symbol {
+  background: transparent;
+  clip-path: none;
+}
+.intro-mark-outline .brand-symbol svg {
+  fill: none;
+  stroke: #8ecaff;
+  stroke-width: 1;
+}
+.intro-mark-outline .brand-symbol svg path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: csi-symbol-draw 900ms var(--csi-intro-logo) ease-out both;
+}
+.intro-mark-outline .brand b {
+  color: transparent;
+  -webkit-text-stroke: 0.5px #98cbff;
+}
+.intro-mark-outline .brand small {
+  opacity: 0;
+}
+.intro-mark-outline .brand-dot {
+  color: transparent;
+  -webkit-text-stroke: 0.5px #98cbff;
+}
+.intro-mark-solid {
+  filter: drop-shadow(0 0 14px #1f67dc38);
+}
+.intro-mark-solid .brand-symbol {
+  animation: csi-symbol-form 650ms calc(var(--csi-intro-logo) + 120ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.intro-mark-solid .brand b {
+  animation: csi-letters-form 850ms calc(var(--csi-intro-logo) + 300ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.intro-mark-solid .brand small {
+  animation: csi-name-form 700ms calc(var(--csi-intro-logo) + 610ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.intro-logo-sweep {
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  width: 38%;
+  background: linear-gradient(100deg, transparent, #80c7ff66, transparent);
+  transform: skewX(-25deg);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: csi-logo-sweep 700ms calc(var(--csi-intro-logo) + 700ms)
+    ease-in-out both;
+  pointer-events: none;
+}
+.intro-typography {
+  position: absolute;
+  top: calc(50% + 80px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+}
+.intro-phrase {
+  display: block;
+  font-size: clamp(13px, 1.25vw, 19px);
+  font-weight: 550;
+  letter-spacing: 4px;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: #d8e7fc;
+}
+.intro-phrase > span {
+  display: inline-block;
+  animation: csi-type 460ms calc(var(--csi-intro-type) + var(--letter) * 23ms)
+    cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.intro-phrase-second > span {
+  animation-delay: calc(var(--csi-intro-type) + 300ms + var(--letter) * 21ms);
+}
+.intro-phrase .intro-yellow {
+  color: #ffdf55;
+}
+.intro-reveal-beam {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 37vmin;
+  width: 37vmin;
+  border: 1px solid #96ccff66;
+  border-radius: 5px;
+  box-shadow:
+    0 0 35px #4d9cff38,
+    inset 0 0 25px #4d9cff30;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  opacity: 0;
+  animation: csi-reveal-beam 800ms var(--csi-intro-reveal)
+    cubic-bezier(0.6, 0, 0.18, 1) both;
+  z-index: 4;
+}
+.intro-bottom {
+  position: absolute;
+  bottom: 35px;
+  left: 45px;
+  right: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  z-index: 5;
+}
+.intro-sector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 7px;
+  letter-spacing: 1.8px;
+  color: #8ca8ce;
+}
+.intro-sector > i {
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+  background: #e5c855;
+}
+.intro-timeline-progress {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 1px;
+  background: #5b86b533;
+  overflow: hidden;
+}
+.intro-timeline-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #2175ec, #8fc4ff, #ffe06d);
+  transform-origin: left;
+  animation: csi-progress var(--csi-intro-duration) linear both;
+}
+.csi-intro .intro-skip {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #7797c036;
+  border-radius: 5px;
+  background: #07182c80;
+  color: #d4e3f7;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 6;
+  cursor: pointer;
+}
+.csi-intro .intro-skip:hover {
+  background: #153254;
+  border-color: #8aabd25e;
+}
+.csi-intro .intro-skip:focus-visible {
+  outline: 2px solid #ffdc44;
+  outline-offset: 5px;
+}
+.csi-intro .intro-skip > svg {
+  color: #7ca7da;
+  transition: transform 0.2s;
+}
+.csi-intro .intro-skip:hover > svg {
+  transform: translateX(3px);
+}
+/* Expanding energy aperture: the inner diamond removes the overlay from center outward. */
+@keyframes csi-intro-aperture {
+  0%,
+  84.89% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%
+    );
+  }
+  100% {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% -125%,
+      225% 50%,
+      50% 225%,
+      -125% 50%,
+      50% -125%
+    );
+  }
+}
+@keyframes csi-intro-short-exit {
+  from {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%,
+      50% 50%
+    );
+  }
+  to {
+    clip-path: polygon(
+      evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      50% -125%,
+      225% 50%,
+      50% 225%,
+      -125% 50%,
+      50% -125%
+    );
+  }
+}
+@keyframes csi-origin {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(0.7);
+    opacity: 0.85;
+  }
+  48% {
+    transform: scale(1.1);
+    opacity: 0.65;
+  }
+  70% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.35);
+    opacity: 0;
+  }
+}
+@keyframes csi-discharge {
+  0% {
+    transform: translate(-50%, -50%) scaleX(0);
+    opacity: 0;
+  }
+  24% {
+    opacity: 0.85;
+  }
+  60% {
+    transform: translate(-50%, -50%) scaleX(1);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(-50%, -50%) scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes csi-camera {
+  0% {
+    transform: scale(1.04);
+  }
+  30% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.025);
+  }
+  85% {
+    transform: scale(1.07);
+  }
+  100% {
+    transform: scale(1.15);
+  }
+}
+@keyframes csi-story-camera {
+  0%,
+  52% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  68%,
+  85% {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+@keyframes csi-depth {
+  0%,
+  8% {
+    opacity: 0;
+  }
+  24% {
+    opacity: 0.6;
+  }
+  53% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes csi-route {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0.85;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.5;
+  }
+}
+@keyframes csi-circuits-life {
+  0%,
+  12% {
+    opacity: 0;
+  }
+  18%,
+  35% {
+    opacity: 1;
+  }
+  52% {
+    opacity: 0.35;
+  }
+  66%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes csi-particle {
+  0%,
+  10% {
+    opacity: 0;
+    transform: translate(var(--px), var(--py)) scale(0.2);
+  }
+  20%,
+  29% {
+    opacity: 0.5;
+    transform: translate(var(--px), var(--py)) scale(0.7);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(0, 0) scale(0.4);
+  }
+  53% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  55% {
+    opacity: 0.8;
+  }
+  71%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--sx), var(--sy)) scale(0.5);
+  }
+}
+@keyframes csi-volume {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+}
+@keyframes csi-impact {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.45);
+  }
+  14% {
+    opacity: 0.65;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3.6);
+  }
+}
+@keyframes csi-concept {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  25%,
+  55% {
+    opacity: 0.85;
+    transform: translateY(0);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes csi-outline {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  20% {
+    opacity: 0.85;
+  }
+  60% {
+    clip-path: inset(0);
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(0);
+  }
+}
+@keyframes csi-symbol-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes csi-symbol-form {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes csi-letters-form {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.1;
+    transform: translateX(-5px);
+  }
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes csi-name-form {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes csi-logo-sweep {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
+}
+@keyframes csi-type {
+  from {
+    opacity: 0;
+    transform: translateY(13px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+@keyframes csi-reveal-beam {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.05);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(12);
+  }
+}
+@keyframes csi-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+html[data-csi-intro="skipping"] .csi-intro {
+  animation: csi-intro-short-exit var(--csi-intro-skip)
+    cubic-bezier(0.6, 0, 0.18, 1) both;
+}
+html[data-csi-intro="skipping"] .csi-intro * {
+  animation-play-state: paused !important;
+}
+html[data-csi-intro="revealing"] .intro-skip {
+  visibility: hidden;
+}
+/* Native CSS handles reduced hardware without loading a WebGL renderer. */
+html[data-csi-intro-lite="true"] .intro-circuits {
+  filter: none;
+}
+html[data-csi-intro-lite="true"] .intro-circuits g:nth-child(even) {
+  display: none;
+}
+html[data-csi-intro-lite="true"] .intro-particle-field > i:nth-child(even) {
+  display: none;
+}
+html[data-csi-intro-lite="true"] .intro-depth-ring.ring-narrow {
+  display: none;
+}
+html[data-csi-intro-lite="true"] .intro-field {
+  animation: none;
+}
+html[data-csi-intro-lite="true"] .intro-phrase > span {
+  filter: none !important;
+}
+@supports not (clip-path: polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 0)) {
+  .brand-intro.csi-intro {
+    animation-name: csi-intro-curtain;
+  }
+  @keyframes csi-intro-curtain {
+    0%,
+    84.89% {
+      clip-path: inset(0);
+    }
+    100% {
+      clip-path: inset(0 0 100% 0 round 0 0 50% 50%);
+    }
+  }
+  html[data-csi-intro="skipping"] .brand-intro.csi-intro {
+    animation-name: csi-intro-curtain;
+    animation-duration: var(--csi-intro-skip);
+  }
+}
+@media (max-width: 640px) {
+  .intro-story {
+    top: 43%;
+    height: 260px;
+    width: 94%;
+  }
+  .intro-mark {
+    width: 310px;
+    height: 150px;
+  }
+  .intro-mark .brand {
+    transform: scale(1.85);
+  }
+  .intro-concept {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    top: -36px;
+    line-height: 1.9;
+  }
+  .intro-typography {
+    top: calc(50% + 71px);
+    gap: 10px;
+  }
+  .intro-phrase {
+    font-size: 12px;
+    letter-spacing: 2.4px;
+  }
+  .intro-bottom {
+    bottom: max(24px, env(safe-area-inset-bottom));
+    left: 22px;
+    right: 22px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: 22px;
+  }
+  .intro-sector {
+    font-size: 6px;
+    letter-spacing: 1px;
+    gap: 8px;
+    grid-row: 2;
+  }
+  .intro-timeline-progress {
+    position: static;
+    transform: none;
+    grid-row: 1;
+    grid-column: 1/-1;
+    width: 100%;
+    height: 1px;
+  }
+  .csi-intro .intro-skip {
+    font-size: 10px;
+    gap: 13px;
+    min-height: 44px;
+    padding: 10px 12px;
+    grid-row: 2;
+    grid-column: 2;
+  }
+  .intro-origin,
+  .intro-particle-field,
+  .intro-depth-ring,
+  .intro-impact-ring,
+  .intro-ambient-pulse {
+    top: 43%;
+  }
+  .intro-vignette {
+    box-shadow: inset 0 0 12vmin 5vmin #01061185;
+  }
+  .intro-circuits {
+    opacity: 0.75;
+  }
+  .intro-reveal-beam {
+    width: 40vmin;
+    height: 40vmin;
+  }
+}
+@media (max-width: 360px) {
+  .intro-mark {
+    width: 280px;
+  }
+  .intro-mark .brand {
+    transform: scale(1.65);
+  }
+  .intro-phrase {
+    font-size: 11px;
+    letter-spacing: 1.9px;
+  }
+  .intro-concept {
+    font-size: 9px;
+  }
+  .intro-bottom {
+    left: 17px;
+    right: 17px;
+  }
+  .intro-sector {
+    font-size: 5px;
+    letter-spacing: 0.8px;
+  }
+  .csi-intro .intro-skip {
+    font-size: 9px;
+    padding: 9px 10px;
+    gap: 9px;
+  }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .intro-story {
+    top: 42%;
+    height: 185px;
+  }
+  .intro-mark {
+    height: 105px;
+  }
+  .intro-mark .brand {
+    transform: scale(1.5);
+  }
+  .intro-concept {
+    top: -20px;
+    font-size: 8px;
+    line-height: 1.6;
+  }
+  .intro-typography {
+    top: calc(50% + 45px);
+    gap: 4px;
+  }
+  .intro-phrase {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+  .intro-bottom {
+    bottom: 15px;
+  }
+  .intro-impact-ring,
+  .intro-depth-ring {
+    max-height: 80vh;
+    max-width: 80vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #csi-brand-intro {
+    display: none !important;
+  }
+  .csi-intro * {
+    animation: none !important;
+    filter: none !important;
+  }
+  #csi-site-shell {
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
