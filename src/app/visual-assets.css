@@ -144,3 +144,42 @@
 .product-visual:has(img[data-photo]) {
   background: #fff;
 }
+.premium-footer .footer-cta .store-whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: #d7e7ff;
+  font-size: 13px;
+}
+.store-address {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.9;
+  margin-top: 14px;
+  color: #b3c6df;
+}
+.store-address a {
+  display: inline-block;
+  min-height: 44px;
+}
+.store-address a:hover {
+  color: white;
+}
+.step-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  min-height: 44px;
+}
+.step-contact-link:hover {
+  color: var(--blue);
+}
+.button.whatsapp-button {
+  background: #087642;
+  color: #fff;
+}
+.button.whatsapp-button:hover {
+  background: #065c34;
+}

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { storeContact, storeWhatsappUrl, storeMapsUrl } from "@/lib/contact";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -85,10 +86,29 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <div className="footer-cta">
             <Headphones size={25} />
             <h4>Vamos tirar seu projeto do papel?</h4>
-            <p>Monte sua lista e solicite um atendimento.</p>
-            <button onClick={() => setDrawer(true)}>
-              Orçamento pelo WhatsApp <MessageCircle size={16} />
-            </button>
+            <p>Fale com a equipe pelo WhatsApp.</p>
+            <a
+              className="store-whatsapp-link"
+              href={storeWhatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {storeContact.phoneDisplay} <MessageCircle size={16} />
+            </a>
+            <address className="store-address">
+              <a
+                href={storeMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver endereço da loja no mapa"
+              >
+                {storeContact.street}
+                <br />
+                {storeContact.city}
+                <br />
+                CEP {storeContact.postcode}
+              </a>
+            </address>
           </div>
         </div>
         <div className="container footer-bottom">
@@ -98,14 +118,16 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </span>
         </div>
       </footer>
-      <button
+      <a
         className="floating-whatsapp"
-        aria-label="Abrir orçamento para WhatsApp"
-        onClick={() => setDrawer(true)}
+        aria-label="Vamos conversar pelo WhatsApp da loja"
+        href={storeWhatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
       >
         <MessageCircle size={25} />
         <span>Vamos conversar?</span>
-      </button>
+      </a>
       <AnimatePresence>
         {notice && (
           <motion.div
@@ -144,11 +166,7 @@ function QuoteDrawer() {
     const product = products.find((p) => p.id === id);
     return product ? [{ product, quantity }] : [];
   });
-  const url = whatsappUrl(
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
-    lines,
-    notes,
-  );
+  const url = whatsappUrl(storeContact.whatsappNumber, lines, notes);
   useEffect(() => setCopied(false), [notes, quote]);
   useEffect(() => {
     if (!drawer) return;
@@ -336,12 +354,12 @@ function QuoteDrawer() {
                         )}{" "}
                         {copied ? "Mensagem copiada" : "Copiar orçamento"}
                       </button>
-                      <details className="message-details">
-                        <summary>Visualizar mensagem</summary>
-                        <pre>{quoteMessage(lines, notes)}</pre>
-                      </details>
                     </>
                   )}
+                  <details className="message-details">
+                    <summary>Visualizar mensagem</summary>
+                    <pre>{quoteMessage(lines, notes)}</pre>
+                  </details>
                   <span className="secure-note">
                     <ShieldCheck size={14} /> Seus produtos, organizados em uma
                     única mensagem.

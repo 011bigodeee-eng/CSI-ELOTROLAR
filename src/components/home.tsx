@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { storeWhatsappUrl } from "@/lib/contact";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -25,7 +26,7 @@ const reveal = {
   transition: { duration: 0.55 },
 };
 export function Home() {
-  const { products, setDrawer } = useStore();
+  const { products } = useStore();
   return (
     <>
       <CinematicHero />
@@ -161,9 +162,14 @@ export function Home() {
               <Headphones size={20} /> Atendimento próximo
             </span>
           </div>
-          <button className="button" onClick={() => setDrawer(true)}>
+          <a
+            className="button"
+            href={storeWhatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Vamos falar sobre seu projeto <ArrowUpRight size={18} />
-          </button>
+          </a>
         </motion.div>
       </section>
       <section className="how-section">
@@ -194,7 +200,16 @@ export function Home() {
             <ArrowRight />
             <div>
               <b>03</b>
-              <h3>Vamos conversar</h3>
+              <h3>
+                <a
+                  href={storeWhatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="step-contact-link"
+                >
+                  Vamos conversar <ArrowUpRight size={17} />
+                </a>
+              </h3>
               <p>
                 Envie sua lista pelo WhatsApp e solicite um orçamento
                 personalizado.

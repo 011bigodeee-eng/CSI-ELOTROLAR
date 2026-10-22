@@ -17,7 +17,7 @@ O catálogo funciona sem banco, sem credenciais e sem configuração inicial. `/
 
 Copie `.env.example` para `.env.local` e preencha apenas os campos necessários:
 
-- `NEXT_PUBLIC_WHATSAPP_NUMBER`: número **oficial** da empresa, com `55`, DDD e número, somente dígitos. Sem ele, a lista oferece cópia e visualização da mensagem e explica que o WhatsApp está pendente. Reinicie o desenvolvimento ou refaça o build após alterar essa variável pública.
+- Contato oficial centralizado em `src/lib/contact.ts`: WhatsApp **(16) 99779-7959** e endereço **Pedro Speranza, 73, Dourado — São Paulo, CEP 13593-062**, fornecidos pelo proprietário. Não é necessário configurar uma variável na Vercel para ativar esse contato.
 - `ADMIN_PASSWORD`: senha forte definida pelo proprietário. Não há senha padrão. Não use prefixo `NEXT_PUBLIC_`.
 - `ADMIN_SESSION_SECRET`: segredo aleatório persistente, gerado com `openssl rand -hex 32`. Necessário junto com a senha para habilitar o painel.
 
@@ -65,7 +65,7 @@ O catálogo público pode ser apresentado sem banco ou WhatsApp. Para envio real
 - Fonte e imagens servidas localmente. WebPs da hero e das categorias somam aproximadamente 350 kB; a mesma imagem de composição é reutilizada pelo cache. Imagens fora da tela têm lazy loading.
 - `prefers-reduced-motion` desabilita abertura, flutuação e parallax. Dispositivos com ponteiro de toque recebem efeitos simplificados. Animações não controlam o acesso ao conteúdo principal.
 
-O WhatsApp continua usando `NEXT_PUBLIC_WHATSAPP_NUMBER`; nenhum contato ou perfil social foi inventado. O painel e a arquitetura de persistência existentes foram preservados, sem novo backend.
+O WhatsApp usa o contato oficial informado pelo proprietário em `src/lib/contact.ts`. O painel e a arquitetura de persistência existentes foram preservados, sem novo backend.
 
 ## Abertura cinematográfica — ordem de carregamento
 
@@ -103,3 +103,5 @@ O comando `npm run assets:prepare`, executado antes de dev/build, valida os arqu
 Foram substituídas as quatro imagens dos destaques (cabo, split, disjuntor e lâmpada) por imagens geradas com aparência fotográfica em WebP, aproximadamente 94 kB no total. Continuam identificadas como ilustrativas. Tomada, ventilador, quadro, tubo de cobre e categorias ainda usam as imagens anteriores. Uploads personalizados, produtos, preços, categorias e listas são preservados. As imagens com fundo branco não substituem os objetos flutuantes da hero: essa composição recebe somente ativos com canal alfa.
 
 Para conferir a implantação da Vercel, abra `/api/version`. A resposta sem cache informa o commit de `VERCEL_GIT_COMMIT_SHA` e se a logo oficial entrou no build. Localmente o commit é `local`. Esse endpoint não expõe credenciais nem dados do proprietário. Um redeploy de uma implantação antiga continua utilizando o código antigo; confira o commit na implantação de produção e a branch `main` do repositório correto.
+
+O botão flutuante “Vamos conversar”, o passo de atendimento e o CTA institucional abrem diretamente o WhatsApp oficial em uma nova aba. “Enviar orçamento” usa o mesmo número, com produtos, quantidades e observações. O endereço no rodapé abre uma pesquisa no Google Maps, sem coordenadas inventadas.
